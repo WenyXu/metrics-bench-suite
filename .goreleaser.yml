@@ -1,0 +1,33 @@
+project_name: clickhouse-csv-loader
+
+builds:
+  - id: cli
+    binary: clickhouse-csv-loader
+    goos:
+      - windows
+      - darwin
+      - linux
+    goarch:
+      - amd64
+
+archives:
+  - id: archive
+    builds:
+      - cli
+    format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    files:
+      - LICENSE
+      - README.md
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - Update README.md
+      - Merge pull request
+      - Merge branch
