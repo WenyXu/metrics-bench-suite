@@ -54,7 +54,9 @@ func main() {
 		Use:   "timeseries_analyzer <tcpflow_output_dir>",
 		Short: "Timeseries Analyzer is a tool to analyze timeseries in tcpflow output",
 		Run: func(cmd *cobra.Command, args []string) {
-			analyzer.Run(cmd, args)
+			if err := analyzer.Run(cmd, args); err != nil {
+				log.Fatalf("Error processing tcpflow files: %v", err)
+			}
 		},
 	}
 

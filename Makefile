@@ -29,3 +29,6 @@ fmt:
 # Lint code
 lint:
 	golint ./...
+
+go-lint:
+	golangci-lint run ./...
