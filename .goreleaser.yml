@@ -1,19 +1,30 @@
-project_name: clickhouse-csv-loader
+project_name: metrics-bench-suite
 
 builds:
-  - id: cli
-    binary: clickhouse-csv-loader
+  - id: remote_write_request_viewer
+    main: ./cmd/remote_write_request_viewer
+    binary: remote_write_request_viewer
     goos:
-      - windows
       - darwin
       - linux
     goarch:
       - amd64
+      - arm64
+  - id: timeseries_analyzer
+    main: ./cmd/timeseries_analyzer
+    binary: timeseries_analyzer
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
 
 archives:
   - id: archive
     builds:
-      - cli
+      - remote_write_request_viewer
+      - timeseries_analyzer
     format: tar.gz
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     files:
