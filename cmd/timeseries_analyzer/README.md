@@ -6,12 +6,12 @@ The Timeseries Analyzer analyzes tcpdump data and outputs the number of timeseri
 
 ### Dump tcp packets
 ```bash
-sudo tcpdump -i eth0 tcp port 4000 -w prometheus_requests.pcap
+tcpdump -i eth0 tcp port 4000 -w prometheus_requests.pcap
 ```
 
 ### Reassemble the packets
 ```bash
-tcpflow -r prometheus_requests.pcap ./tcpflow_output
+tcpflow -r prometheus_requests.pcap -o ./tcpflow_output
 ```
 
 ### Analyze the tcpflow output

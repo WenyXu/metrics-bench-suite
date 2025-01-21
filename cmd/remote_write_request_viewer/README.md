@@ -8,14 +8,12 @@ The tool can be used from the command line. Below are some examples of how to us
 
 ### Decode from Input
 ```bash
-bash
 remote_write_request_viewer <base64_encoded_data>
 ```
 
 ### Decode from File (Base64 Encoded)
 
 ```bash
-bash
 remote_write_request_viewer -t file <path/to/file>
 ```
 

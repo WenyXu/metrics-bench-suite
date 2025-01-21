@@ -21,6 +21,7 @@
 # vendor/
 
 *.pcap
+*.tar.gz
 
 /bin/*
 /output/*
