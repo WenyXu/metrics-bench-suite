@@ -1,6 +1,6 @@
 # Remote Write Request Viewer
 
-Remote Write Request Viewer is a command-line tool designed to decode Prometheus remote write body data.
+Remote Write Request Viewer is a command-line tool designed to decode Prometheus remote write body data (snappy compressed).
 
 ## Usage
 
