@@ -1,6 +1,15 @@
 project_name: metrics-bench-suite
 
 builds:
+  - id: loader
+    main: ./cmd/loader
+    binary: loader
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
   - id: remote_write_request_viewer
     main: ./cmd/remote_write_request_viewer
     binary: remote_write_request_viewer
@@ -23,6 +32,7 @@ builds:
 archives:
   - id: archive
     builds:
+      - loader
       - remote_write_request_viewer
       - timeseries_analyzer
     format: tar.gz
