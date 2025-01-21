@@ -39,7 +39,7 @@ func (a *Analyzer) Run(cmd *cobra.Command, args []string) error {
 		if err != nil {
 			log.Fatalf("failed to count table names: %v", err)
 		}
-		timeseries.CountAllTimeSeries(&wr, &timeSeriesCounter)
+		err = timeseries.CountAllTimeSeries(&wr, &timeSeriesCounter)
 		if err != nil {
 			log.Fatalf("failed to count time series: %v", err)
 		}
