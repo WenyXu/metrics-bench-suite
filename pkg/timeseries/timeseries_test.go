@@ -17,13 +17,12 @@ func TestFindTimeSeries(t *testing.T) {
 		},
 	}
 
-	tableName, ts, err := ExtractTimeSeries(input)
+	label, err := ExtractFirstLabel(input)
 	if err != nil {
 		t.Fatalf("failed to find time series: %v", err)
 	}
 
-	assert.Equal(t, tableName, "test_table")
-	assert.Equal(t, ts.String(), "pod_name=test_pod, namespace=test_namespace, container_name=test_container")
+	assert.Equal(t, label.Value, "test_table")
 }
 
 func TestParseTimeSeries(t *testing.T) {

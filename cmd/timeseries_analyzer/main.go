@@ -22,7 +22,7 @@ func (a *Analyzer) Run(cmd *cobra.Command, args []string) error {
 	log.Printf("Processing file: %s", filePath)
 
 	tableNameCounter := make(map[string]bool)
-	timeSeriesCounter := make(map[string]bool)
+	timeSeriesCounter := make(timeseries.Counter)
 
 	requests, err := parser.ParseHTTPRequests(filePath)
 	if err != nil {
@@ -35,7 +35,11 @@ func (a *Analyzer) Run(cmd *cobra.Command, args []string) error {
 		if err != nil {
 			log.Fatalf("failed to decode body: %v", err)
 		}
-		err = timeseries.CountTimeSeries(&wr, &tableNameCounter, &timeSeriesCounter)
+		err = timeseries.CountTableName(&wr, &tableNameCounter)
+		if err != nil {
+			log.Fatalf("failed to count table names: %v", err)
+		}
+		timeseries.CountAllTimeSeries(&wr, &timeSeriesCounter)
 		if err != nil {
 			log.Fatalf("failed to count time series: %v", err)
 		}

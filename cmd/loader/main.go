@@ -104,7 +104,9 @@ func (l *Loader) process(tsSet []prompb.TimeSeries) error {
 	wg := sync.WaitGroup{}
 	now := time.Now()
 	total := len(tsSet)
-	for _, chunk := range slices.Collect(slices.Chunk(tsSet, l.TimeseriesPerRequest)) {
+	chunks := slices.Collect(slices.Chunk(tsSet, l.TimeseriesPerRequest))
+	log.Printf("Sending %d chunks, chunk size: %d, total time series: %d", len(chunks), l.TimeseriesPerRequest, total)
+	for _, chunk := range chunks {
 		wg.Add(1)
 		go func(chunk []prompb.TimeSeries) {
 			defer wg.Done()
@@ -147,10 +149,9 @@ func (l *Loader) getTimeSeries(wrSet []prompb.WriteRequest) ([]timeseries.TimeSe
 
 func (l *Loader) printStats(requests *[]prompb.WriteRequest) error {
 	tableNameCounter := make(map[string]bool)
-	timeSeriesCounter := make(map[string]bool)
 
 	for _, request := range *requests {
-		err := timeseries.CountTimeSeries(&request, &tableNameCounter, &timeSeriesCounter)
+		err := timeseries.CountTableName(&request, &tableNameCounter)
 		if err != nil {
 			log.Fatalf("failed to count time series: %v", err)
 		}
@@ -196,7 +197,7 @@ func main() {
 	rootCmd.Flags().StringP("url", "u", "http://localhost:4000/v1/prometheus/write?db=public", "The URL of the database")
 	rootCmd.Flags().StringP("tcpflow-output", "t", "", "The path to the tcpflow output")
 	rootCmd.Flags().IntP("timeseries-per-request", "r", 2000, "The number of timeseries per request")
-	rootCmd.Flags().StringP("interval", "i", "10s", "The interval of the data")
+	rootCmd.Flags().StringP("interval", "i", "10s", "The interval of the loading data")
 	rootCmd.Flags().IntP("seed", "s", 123456, "The seed for the random number generator")
 	rootCmd.Flags().StringP("start-date", "", "2025-01-01T00:00:00Z", "The start date of the data")
 	rootCmd.Flags().BoolP("dry-run", "d", false, "Dry run the loader")

@@ -61,36 +61,12 @@ func ExtractFirstLabel(ts *prompb.TimeSeries) (prompb.Label, error) {
 	return ts.Labels[0], nil
 }
 
-// ExtractTimeSeries extracts the table name and the time series from the given TimeSeries.
-func ExtractTimeSeries(ts *prompb.TimeSeries) (string, TimeSerie, error) {
-	label, err := ExtractFirstLabel(ts)
-	if err != nil {
-		return "", TimeSerie{}, err
-	}
-
-	tableName := label.Value
-
-	var labels []Label
-	for _, label := range ts.Labels[1:] {
-		labels = append(labels, Label{
-			Name:  label.Name,
-			Value: label.Value,
-		})
-	}
-
-	return tableName, TimeSerie{Labels: labels}, nil
-}
-
-// CountTimeSeries counts the number of time series in the WriteRequest.
-func CountTimeSeries(wr *prompb.WriteRequest, tableNameCounter *map[string]bool, timeSeriesCounter *map[string]bool) error {
+// CountTableName counts the number of table names in the WriteRequest.
+func CountTableName(wr *prompb.WriteRequest, tableNameCounter *map[string]bool) error {
 	for _, ts := range wr.Timeseries {
-		tableName, timeseries, err := ExtractTimeSeries(&ts)
-		if err != nil {
-			return err
-		}
+		tableName := ts.Labels[0].Value
 
 		(*tableNameCounter)[tableName] = true
-		(*timeSeriesCounter)[timeseries.String()] = true
 	}
 
 	return nil
