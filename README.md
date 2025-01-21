@@ -1,6 +1,6 @@
 # Metrics Bench Suite
 
-Metrics Bench Suite is a suite of tools to benchmark timeseries database storing and querying metrics data.
+Metrics Bench Suite is a set of tools designed to benchmark the storage and querying of metrics data in time-series databases
 
 ## Tools
 
