@@ -47,6 +47,10 @@ func (l *Loader) Run(cmd *cobra.Command, args []string) error {
 	}
 	l.StartDate = initialDate
 	l.Interval = interval
+	log.Printf("Start date: %s", l.StartDate)
+	log.Printf("Interval: %s", l.Interval)
+	log.Printf("Seed: %d", l.Seed)
+	log.Printf("Timeseries per request: %d", l.TimeseriesPerRequest)
 
 	r := rand.New(rand.NewSource(int64(l.Seed)))
 

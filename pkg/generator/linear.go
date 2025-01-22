@@ -33,5 +33,5 @@ func (lt *LinearTrend) Generate() (Value, error) {
 	days := float64(lt.CurrentDate.Sub(lt.InitialDate).Hours() / 24)
 	// Calculate y = ax + b (with coef as a, offset as b) using the previous value
 	value := lt.Coefficient*days + 1 + lt.Offset
-	return Value{Timestamp: lt.CurrentDate.Unix(), Value: value}, nil
+	return Value{Timestamp: lt.CurrentDate.UnixMilli(), Value: value}, nil
 }
