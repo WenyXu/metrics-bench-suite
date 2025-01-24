@@ -117,7 +117,7 @@ func TestScaleLabels(t *testing.T) {
 		{
 			Labels: []prompb.Label{
 				{Name: "__name__", Value: "metric"},
-				{Name: "host_1", Value: "host"},
+				{Name: "hosta", Value: "host"},
 			},
 			Samples: []prompb.Sample{
 				{Value: 1, Timestamp: 1},
@@ -126,7 +126,7 @@ func TestScaleLabels(t *testing.T) {
 		{
 			Labels: []prompb.Label{
 				{Name: "__name__", Value: "metric"},
-				{Name: "job_1", Value: "job"},
+				{Name: "joba", Value: "job"},
 			},
 			Samples: []prompb.Sample{
 				{Value: 1, Timestamp: 1},
