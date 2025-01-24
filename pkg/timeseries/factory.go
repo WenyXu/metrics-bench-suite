@@ -51,14 +51,17 @@ type Sample struct {
 }
 
 // Generate generates a list of TimeSeries and a list of Values
-func (fs *FactorySet) Generate() ([]prompb.TimeSeries, error) {
+func (fs *FactorySet) Generate(scale int) ([]prompb.TimeSeries, error) {
 	tsSet := []prompb.TimeSeries{}
-	for _, tsf := range fs.timeseriesSet {
-		labels, value, err := tsf.Generate()
-		if err != nil {
-			return nil, err
+
+	for i := 0; i < scale; i++ {
+		for _, tsf := range fs.timeseriesSet {
+			labels, value, err := tsf.Generate()
+			if err != nil {
+				return nil, err
+			}
+			tsSet = append(tsSet, prompb.TimeSeries{Labels: labels, Samples: []prompb.Sample{{Value: value.Value, Timestamp: value.Timestamp}}})
 		}
-		tsSet = append(tsSet, prompb.TimeSeries{Labels: labels, Samples: []prompb.Sample{{Value: value.Value, Timestamp: value.Timestamp}}})
 	}
 	return tsSet, nil
 }

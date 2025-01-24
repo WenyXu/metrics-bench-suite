@@ -19,31 +19,31 @@ func TestLinearTrend(t *testing.T) {
 	data, err := lt.Generate()
 	assert.NoError(t, err)
 
-	assert.Equal(t, data.Timestamp, time.Date(2025, 1, 2, 0, 0, 0, 0, time.UTC).Unix())
+	assert.Equal(t, data.Timestamp, time.Date(2025, 1, 2, 0, 0, 0, 0, time.UTC).UnixMilli())
 	assert.Equal(t, data.Value, 2.05)
 
 	data, err = lt.Generate()
 	assert.NoError(t, err)
 
-	assert.Equal(t, data.Timestamp, time.Date(2025, 1, 3, 0, 0, 0, 0, time.UTC).Unix())
+	assert.Equal(t, data.Timestamp, time.Date(2025, 1, 3, 0, 0, 0, 0, time.UTC).UnixMilli())
 	assert.Equal(t, data.Value, 2.1)
 
 	data, err = lt.Generate()
 	assert.NoError(t, err)
 
-	assert.Equal(t, data.Timestamp, time.Date(2025, 1, 4, 0, 0, 0, 0, time.UTC).Unix())
+	assert.Equal(t, data.Timestamp, time.Date(2025, 1, 4, 0, 0, 0, 0, time.UTC).UnixMilli())
 	assert.Equal(t, data.Value, 2.15)
 
 	data, err = lt.Generate()
 	assert.NoError(t, err)
 
-	assert.Equal(t, data.Timestamp, time.Date(2025, 1, 5, 0, 0, 0, 0, time.UTC).Unix())
+	assert.Equal(t, data.Timestamp, time.Date(2025, 1, 5, 0, 0, 0, 0, time.UTC).UnixMilli())
 	assert.Equal(t, data.Value, 2.2)
 
 	data, err = lt.Generate()
 	assert.NoError(t, err)
 
-	assert.Equal(t, data.Timestamp, time.Date(2025, 1, 6, 0, 0, 0, 0, time.UTC).Unix())
+	assert.Equal(t, data.Timestamp, time.Date(2025, 1, 6, 0, 0, 0, 0, time.UTC).UnixMilli())
 	assert.Equal(t, data.Value, 2.25)
 }
 

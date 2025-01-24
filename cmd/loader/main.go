@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"metrics-bench-suite/pkg/http"
 	"metrics-bench-suite/pkg/parser"
@@ -22,22 +23,33 @@ type Loader struct {
 	TcpflowOutput        string
 	TimeseriesPerRequest int
 	Interval             time.Duration
+	MockInterval         time.Duration
 	StartDate            time.Time
 	DryRun               bool
-
-	Seed int
+	SampleScale          int
+	MetricScale          int
+	LabelScale           int
+	Seed                 int
 }
 
 // Run is the main function for the loader
 func (l *Loader) Run(cmd *cobra.Command, args []string) error {
 	intervalStr, _ := cmd.Flags().GetString("interval")
+	mockIntervalStr, _ := cmd.Flags().GetString("mock-interval")
 	initialDateStr, _ := cmd.Flags().GetString("start-date")
 	l.URL, _ = cmd.Flags().GetString("url")
 	l.TcpflowOutput, _ = cmd.Flags().GetString("tcpflow-output")
 	l.TimeseriesPerRequest, _ = cmd.Flags().GetInt("timeseries-per-request")
 	l.Seed, _ = cmd.Flags().GetInt("seed")
 	l.DryRun, _ = cmd.Flags().GetBool("dry-run")
+	l.SampleScale, _ = cmd.Flags().GetInt("sample-scale")
+	l.MetricScale, _ = cmd.Flags().GetInt("metric-scale")
+	l.LabelScale, _ = cmd.Flags().GetInt("label-scale")
 	interval, err := time.ParseDuration(intervalStr)
+	if err != nil {
+		return err
+	}
+	l.MockInterval, err = time.ParseDuration(mockIntervalStr)
 	if err != nil {
 		return err
 	}
@@ -47,7 +59,14 @@ func (l *Loader) Run(cmd *cobra.Command, args []string) error {
 	}
 	l.StartDate = initialDate
 	l.Interval = interval
-
+	log.Printf("Start date: %s", l.StartDate)
+	log.Printf("Interval: %s", l.Interval)
+	log.Printf("Mock interval: %s", l.MockInterval)
+	log.Printf("Seed: %d", l.Seed)
+	log.Printf("Timeseries per request: %d", l.TimeseriesPerRequest)
+	log.Printf("Sample scale: %d", l.SampleScale)
+	log.Printf("Metric scale: %d", l.MetricScale)
+	log.Printf("Label scale: %d", l.LabelScale)
 	r := rand.New(rand.NewSource(int64(l.Seed)))
 
 	wrSet, err := l.getAllRemoteWriteRequest()
@@ -79,10 +98,12 @@ func (l *Loader) Run(cmd *cobra.Command, args []string) error {
 	defer ticker.Stop()
 
 	for range ticker.C {
-		tsSet, err := fs.Generate()
+		tsSet, err := fs.Generate(l.SampleScale)
 		if err != nil {
 			return err
 		}
+		tsSet = ScaleMetrics(tsSet, l.MetricScale)
+		tsSet = ScaleLabels(tsSet, l.LabelScale)
 		err = l.process(tsSet)
 		if err != nil {
 			log.Printf("failed to send write request: %v", err)
@@ -90,6 +111,49 @@ func (l *Loader) Run(cmd *cobra.Command, args []string) error {
 	}
 
 	return nil
+}
+
+// CloneTimeSeries clones a time series
+func CloneTimeSeries(ts prompb.TimeSeries) prompb.TimeSeries {
+	clone := prompb.TimeSeries{}
+	clone.Labels = make([]prompb.Label, len(ts.Labels))
+	copy(clone.Labels, ts.Labels)
+	clone.Samples = make([]prompb.Sample, len(ts.Samples))
+	copy(clone.Samples, ts.Samples)
+	return clone
+}
+
+// ScaleMetrics scales the metrics by the given scale
+func ScaleMetrics(tsSet []prompb.TimeSeries, scale int) []prompb.TimeSeries {
+	total := len(tsSet)
+	for i := 1; i < scale; i++ {
+		for _, ts := range tsSet[:total] {
+			cloneTs := CloneTimeSeries(ts)
+			cloneTs.Labels[0].Value = fmt.Sprintf("%s_%d", ts.Labels[0].Value, i)
+			tsSet = append(tsSet, cloneTs)
+		}
+	}
+
+	return tsSet
+}
+
+// ScaleLabels scales the labels by the given scale
+func ScaleLabels(tsSet []prompb.TimeSeries, scale int) []prompb.TimeSeries {
+	total := len(tsSet)
+	for i := 1; i < scale; i++ {
+		for _, ts := range tsSet[:total] {
+			cloneTs := CloneTimeSeries(ts)
+			for j := 0; j < len(cloneTs.Labels); j++ {
+				if cloneTs.Labels[j].Name == "__name__" {
+					continue
+				}
+				cloneTs.Labels[j].Name = fmt.Sprintf("%s%c", cloneTs.Labels[j].Name, 96+i)
+			}
+			tsSet = append(tsSet, cloneTs)
+		}
+	}
+
+	return tsSet
 }
 
 func (l *Loader) sendWriteRequest(tsSet []prompb.TimeSeries) error {
@@ -105,7 +169,7 @@ func (l *Loader) process(tsSet []prompb.TimeSeries) error {
 	now := time.Now()
 	total := len(tsSet)
 	chunks := slices.Collect(slices.Chunk(tsSet, l.TimeseriesPerRequest))
-	log.Printf("Sending %d chunks, chunk size: %d, total time series: %d", len(chunks), l.TimeseriesPerRequest, total)
+	log.Printf("Sending %d chunks, chunk size: %d, total time series: %d, total samples: %d", len(chunks), l.TimeseriesPerRequest, total/l.SampleScale, total)
 	for _, chunk := range chunks {
 		wg.Add(1)
 		go func(chunk []prompb.TimeSeries) {
@@ -122,7 +186,7 @@ func (l *Loader) process(tsSet []prompb.TimeSeries) error {
 }
 
 func (l *Loader) buildFactorySet(tsSet []timeseries.TimeSerie, r *rand.Rand) (timeseries.FactorySet, error) {
-	fs, err := timeseries.NewFactorySet(tsSet, r, l.StartDate, l.Interval)
+	fs, err := timeseries.NewFactorySet(tsSet, r, l.StartDate, l.MockInterval)
 	if err != nil {
 		return timeseries.FactorySet{}, err
 	}
@@ -197,10 +261,14 @@ func main() {
 	rootCmd.Flags().StringP("url", "u", "http://localhost:4000/v1/prometheus/write?db=public", "The URL of the database")
 	rootCmd.Flags().StringP("tcpflow-output", "t", "", "The path to the tcpflow output")
 	rootCmd.Flags().IntP("timeseries-per-request", "r", 2000, "The number of timeseries per request")
-	rootCmd.Flags().StringP("interval", "i", "10s", "The interval of the loading data")
+	rootCmd.Flags().StringP("interval", "i", "1s", "The interval of the loading data")
+	rootCmd.Flags().StringP("mock-interval", "m", "10s", "The interval of the mock data")
 	rootCmd.Flags().IntP("seed", "s", 123456, "The seed for the random number generator")
 	rootCmd.Flags().StringP("start-date", "", "2025-01-01T00:00:00Z", "The start date of the data")
 	rootCmd.Flags().BoolP("dry-run", "d", false, "Dry run the loader")
+	rootCmd.Flags().IntP("sample-scale", "", 1, "The scale of the samples")
+	rootCmd.Flags().IntP("metric-scale", "", 1, "The scale of the metrics")
+	rootCmd.Flags().IntP("label-scale", "", 1, "The scale of the labels")
 
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatalf("Error: %v", err)
