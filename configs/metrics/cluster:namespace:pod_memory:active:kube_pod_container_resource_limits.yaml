@@ -1,0 +1,263 @@
+end: '2021-01-01T00:00:00Z'
+fields:
+- dist:
+    lower_bound: 1
+    step: 10
+    type: mono_inc
+    upper_bound: 1000
+  name: greptime_value
+  type: Float
+interval: 30
+precision: 1000
+start: '2021-01-01T00:00:00Z'
+tags:
+- dist:
+    type: constant_string
+    value: eks-us-east-1-qa1
+  name: cluster
+  type: String
+- dist:
+    preset:
+    - value: argo-server
+      weight: 1
+    - value: jarvis-producer
+      weight: 1
+    - value: loki
+      weight: 1
+    - value: vector
+      weight: 1
+    - value: controller
+      weight: 1
+    - value: jarvis-consumer
+      weight: 1
+    - value: kube-fledged
+      weight: 1
+    - value: node-driver-registrar
+      weight: 1
+    - value: datanode
+      weight: 1
+    - value: etcd
+      weight: 1
+    - value: greptimedb-standalone
+      weight: 1
+    - value: config-reloader
+      weight: 1
+    - value: frontend
+      weight: 1
+    - value: victoria-metrics-cluster-vmstorage
+      weight: 1
+    - value: kube-state-metrics
+      weight: 1
+    - value: ebs-plugin
+      weight: 1
+    - value: loki-sc-rules
+      weight: 1
+    - value: gcrm
+      weight: 1
+    - value: liveness-probe
+      weight: 1
+    - value: jmx-exporter
+      weight: 1
+    type: weighted_preset
+  name: container
+  type: String
+- dist:
+    type: constant_string
+    value: http
+  name: endpoint
+  type: String
+- dist:
+    type: constant_string
+    value: qa
+  name: env
+  type: String
+- dist:
+    type: constant_string
+    value: 'false'
+  name: holiday
+  type: String
+- dist:
+    type: constant_string
+    value: 10.0.169.98:8080
+  name: instance
+  type: String
+- dist:
+    type: constant_string
+    value: kube-state-metrics
+  name: job
+  type: String
+- dist:
+    preset:
+    - value: argo-workflows
+      weight: 1
+    - value: jarvis
+      weight: 1
+    - value: loki
+      weight: 1
+    - value: vector
+      weight: 1
+    - value: sealed-secrets
+      weight: 1
+    - value: kube-fledged
+      weight: 1
+    - value: kube-system
+      weight: 1
+    - value: ingress-nginx
+      weight: 1
+    - value: greptimedb
+      weight: 1
+    - value: dedicated-etcd
+      weight: 1
+    - value: greptimedb-standalone
+      weight: 1
+    - value: monitoring
+      weight: 1
+    - value: victoria-metrics-cluster
+      weight: 1
+    - value: gcrm
+      weight: 1
+    - value: kafka
+      weight: 1
+    - value: cert-manager
+      weight: 1
+    - value: gcp
+      weight: 1
+    - value: internal-greptimedb-standalone
+      weight: 1
+    - value: etcd
+      weight: 1
+    - value: gcpa
+      weight: 1
+    type: weighted_preset
+  name: namespace
+  type: String
+- dist:
+    preset:
+    - value: ip-10-0-169-179.ec2.internal
+      weight: 1
+    - value: ip-10-0-175-164.ec2.internal
+      weight: 1
+    - value: ip-10-0-162-53.ec2.internal
+      weight: 1
+    - value: ip-10-0-162-77.ec2.internal
+      weight: 1
+    - value: ip-10-0-166-131.ec2.internal
+      weight: 1
+    type: weighted_preset
+  name: node
+  type: String
+- dist:
+    preset:
+    - value: argo-workflows-server-d96d86d9c-99qpl
+      weight: 1
+    - value: jarvis-producer-59875c87-sqjbv
+      weight: 1
+    - value: loki-backend-1
+      weight: 1
+    - value: vector-2xvqg
+      weight: 1
+    - value: sealed-secrets-5c8744579f-tnvjk
+      weight: 1
+    - value: jarvis-consumer-86999fbb4f-f6gdm
+      weight: 1
+    - value: kube-fledged-controller-584c9bbf47-bz95c
+      weight: 1
+    - value: ebs-csi-node-297wb
+      weight: 1
+    - value: ingress-nginx-controller-646d774bc8-frtzs
+      weight: 1
+    - value: greptimedb-datanode-1
+      weight: 1
+    - value: etcd-1
+      weight: 1
+    - value: greptimedb-standalone-0
+      weight: 1
+    - value: ebs-csi-node-h64gd
+      weight: 1
+    - value: greptimedb-datanode-2
+      weight: 1
+    - value: prometheus-prometheus-kube-prometheus-prometheus-0
+      weight: 1
+    - value: greptimedb-frontend-76f4c4c694-9vxk2
+      weight: 1
+    - value: victoria-metrics-cluster-vmstorage-1
+      weight: 1
+    - value: prometheus-kube-state-metrics-8f664f9c8-cdcrg
+      weight: 1
+    - value: ebs-csi-controller-7569cdd674-fvqnc
+      weight: 1
+    - value: ebs-csi-node-qkksr
+      weight: 1
+    type: weighted_preset
+  name: pod
+  type: String
+- dist:
+    type: constant_string
+    value: monitoring/prometheus-kube-prometheus-prometheus
+  name: prometheus
+  type: String
+- dist:
+    type: constant_string
+    value: prometheus-prometheus-kube-prometheus-prometheus-0
+  name: prometheus_replica
+  type: String
+- dist:
+    type: constant_string
+    value: memory
+  name: resource
+  type: String
+- dist:
+    type: constant_string
+    value: prometheus-kube-state-metrics
+  name: service
+  type: String
+- dist:
+    preset:
+    - value: f5a3af84-221f-486f-821f-1fbd61b5ede2
+      weight: 1
+    - value: 85c9f743-c7d2-470b-817e-a96a1067da1c
+      weight: 1
+    - value: e7b453fc-b57d-4923-9313-fa52109e1d1f
+      weight: 1
+    - value: 6bdfa225-b9c0-4ba9-9846-65789e0598f2
+      weight: 1
+    - value: 6eaa4967-0c53-492a-9343-8f7d279664ea
+      weight: 1
+    - value: d06328a4-e1ad-4e34-a1a4-3e899b395bf6
+      weight: 1
+    - value: ee83cd5c-99b0-4252-9f02-80c0da28b1c9
+      weight: 1
+    - value: 144eb1a8-0735-4d5e-bffc-75b4c92086ca
+      weight: 1
+    - value: 438ceb9c-52bb-4988-bf02-f676fa4f25bc
+      weight: 1
+    - value: 3a3a91a0-1fad-4111-8493-2cbdd9a32661
+      weight: 1
+    - value: 84021db2-1a25-4c88-9001-6a0eb1a964c3
+      weight: 1
+    - value: 9ca37099-9886-4fcf-abc0-a11ff981c2e6
+      weight: 1
+    - value: 8b12da79-83a6-422f-9446-965d25af590a
+      weight: 1
+    - value: a65f62a4-a3c6-4932-8013-3de7e2a8c4e9
+      weight: 1
+    - value: 46e70299-f4da-4519-9d6c-97431b411fe9
+      weight: 1
+    - value: 530ba3ae-7114-4b39-8cea-e4bd288b3608
+      weight: 1
+    - value: f4afe438-e373-4366-aa1b-e2daec2f7f04
+      weight: 1
+    - value: 79dabf76-afa9-4b1a-98bb-a50d925472a1
+      weight: 1
+    - value: 8294982e-5ea0-48a7-b50d-e227fbe57f1b
+      weight: 1
+    - value: d5571f30-c2bf-4bda-8632-05d64baa22f9
+      weight: 1
+    type: weighted_preset
+  name: uid
+  type: String
+- dist:
+    type: constant_string
+    value: byte
+  name: unit
+  type: String

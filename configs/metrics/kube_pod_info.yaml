@@ -1,0 +1,353 @@
+end: '2021-01-01T00:00:00Z'
+fields:
+- dist:
+    lower_bound: 1
+    step: 10
+    type: mono_inc
+    upper_bound: 1000
+  name: greptime_value
+  type: Float
+interval: 30
+precision: 1000
+start: '2021-01-01T00:00:00Z'
+tags:
+- dist:
+    type: constant_string
+    value: eks-us-east-1-qa1
+  name: cluster
+  type: String
+- dist:
+    type: constant_string
+    value: kube-state-metrics
+  name: container
+  type: String
+- dist:
+    preset:
+    - value: ReplicaSet
+      weight: 1
+    - value: StatefulSet
+      weight: 1
+    - value: Workflow
+      weight: 1
+    - value: DaemonSet
+      weight: 1
+    - value: null
+      weight: 1
+    type: weighted_preset
+  name: created_by_kind
+  type: String
+- dist:
+    preset:
+    - value: ingress-nginx-controller-646d774bc8
+      weight: 1
+    - value: gcpa-mtls-6c446fbd88
+      weight: 1
+    - value: cert-manager-6b6c8845d7
+      weight: 1
+    - value: greptimedb-datanode
+      weight: 1
+    - value: ebs-csi-controller-7569cdd674
+      weight: 1
+    - value: karpenter-56f457fcb9
+      weight: 1
+    - value: etcd-backup-1741438800
+      weight: 1
+    - value: vector
+      weight: 1
+    - value: loki-backend
+      weight: 1
+    - value: prometheus-kube-state-metrics-8f664f9c8
+      weight: 1
+    - value: etcd
+      weight: 1
+    - value: ebs-csi-node
+      weight: 1
+    - value: jarvis-consumer-86999fbb4f
+      weight: 1
+    - value: reloader-reloader-589bd4796c
+      weight: 1
+    - value: efs-csi-node
+      weight: 1
+    - value: kube-proxy
+      weight: 1
+    - value: kube-fledged-controller-584c9bbf47
+      weight: 1
+    - value: prometheus-prometheus-node-exporter
+      weight: 1
+    - value: coredns-586b798467
+      weight: 1
+    - value: dashboard-playground-5d7c84ffbc
+      weight: 1
+    type: weighted_preset
+  name: created_by_name
+  type: String
+- dist:
+    type: constant_string
+    value: http
+  name: endpoint
+  type: String
+- dist:
+    type: constant_string
+    value: qa
+  name: env
+  type: String
+- dist:
+    type: constant_string
+    value: 'false'
+  name: holiday
+  type: String
+- dist:
+    preset:
+    - value: 10.0.162.53
+      weight: 1
+    - value: 10.0.166.131
+      weight: 1
+    - value: 10.0.169.179
+      weight: 1
+    - value: 10.0.162.77
+      weight: 1
+    - value: 10.0.175.164
+      weight: 1
+    type: weighted_preset
+  name: host_ip
+  type: String
+- dist:
+    preset:
+    - value: 'false'
+      weight: 1
+    - value: 'true'
+      weight: 1
+    type: weighted_preset
+  name: host_network
+  type: String
+- dist:
+    type: constant_string
+    value: 10.0.169.98:8080
+  name: instance
+  type: String
+- dist:
+    type: constant_string
+    value: kube-state-metrics
+  name: job
+  type: String
+- dist:
+    preset:
+    - value: ingress-nginx
+      weight: 1
+    - value: gcpa
+      weight: 1
+    - value: cert-manager
+      weight: 1
+    - value: greptimedb
+      weight: 1
+    - value: kube-system
+      weight: 1
+    - value: karpenter
+      weight: 1
+    - value: etcd
+      weight: 1
+    - value: vector
+      weight: 1
+    - value: loki
+      weight: 1
+    - value: monitoring
+      weight: 1
+    - value: jarvis
+      weight: 1
+    - value: reloader
+      weight: 1
+    - value: kube-fledged
+      weight: 1
+    - value: dedicated-etcd
+      weight: 1
+    - value: robusta
+      weight: 1
+    - value: external-dns
+      weight: 1
+    - value: kafka
+      weight: 1
+    - value: internal-ingress-nginx
+      weight: 1
+    - value: gcp
+      weight: 1
+    - value: bytebase
+      weight: 1
+    type: weighted_preset
+  name: namespace
+  type: String
+- dist:
+    preset:
+    - value: ip-10-0-162-53.ec2.internal
+      weight: 1
+    - value: ip-10-0-166-131.ec2.internal
+      weight: 1
+    - value: ip-10-0-169-179.ec2.internal
+      weight: 1
+    - value: ip-10-0-162-77.ec2.internal
+      weight: 1
+    - value: ip-10-0-175-164.ec2.internal
+      weight: 1
+    type: weighted_preset
+  name: node
+  type: String
+- dist:
+    preset:
+    - value: ingress-nginx-controller-646d774bc8-frtzs
+      weight: 1
+    - value: gcpa-mtls-6c446fbd88-xbkhr
+      weight: 1
+    - value: cert-manager-6b6c8845d7-xvwcj
+      weight: 1
+    - value: greptimedb-datanode-1
+      weight: 1
+    - value: ebs-csi-controller-7569cdd674-whx4z
+      weight: 1
+    - value: karpenter-56f457fcb9-x9k7c
+      weight: 1
+    - value: etcd-backup-1741438800-backup-490647295
+      weight: 1
+    - value: greptimedb-datanode-2
+      weight: 1
+    - value: vector-2xvqg
+      weight: 1
+    - value: loki-backend-1
+      weight: 1
+    - value: prometheus-kube-state-metrics-8f664f9c8-cdcrg
+      weight: 1
+    - value: etcd-0
+      weight: 1
+    - value: ebs-csi-node-qkksr
+      weight: 1
+    - value: ebs-csi-node-2ffjx
+      weight: 1
+    - value: jarvis-consumer-86999fbb4f-f6gdm
+      weight: 1
+    - value: reloader-reloader-589bd4796c-bbxgv
+      weight: 1
+    - value: efs-csi-node-t2vwk
+      weight: 1
+    - value: kube-proxy-vccv8
+      weight: 1
+    - value: kube-fledged-controller-584c9bbf47-bz95c
+      weight: 1
+    - value: prometheus-prometheus-node-exporter-8fcnl
+      weight: 1
+    type: weighted_preset
+  name: pod
+  type: String
+- dist:
+    preset:
+    - value: 10.0.171.17
+      weight: 1
+    - value: 10.0.170.4
+      weight: 1
+    - value: 10.0.161.152
+      weight: 1
+    - value: 10.0.168.66
+      weight: 1
+    - value: 10.0.173.12
+      weight: 1
+    - value: 10.0.166.157
+      weight: 1
+    - value: 10.0.166.198
+      weight: 1
+    - value: 10.0.175.117
+      weight: 1
+    - value: 10.0.161.108
+      weight: 1
+    - value: 10.0.160.51
+      weight: 1
+    - value: 10.0.169.98
+      weight: 1
+    - value: 10.0.169.75
+      weight: 1
+    - value: 10.0.163.250
+      weight: 1
+    - value: 10.0.173.246
+      weight: 1
+    - value: 10.0.168.168
+      weight: 1
+    - value: 10.0.165.110
+      weight: 1
+    - value: 10.0.162.53
+      weight: 1
+    - value: 10.0.162.77
+      weight: 1
+    - value: 10.0.160.165
+      weight: 1
+    - value: 10.0.167.225
+      weight: 1
+    type: weighted_preset
+  name: pod_ip
+  type: String
+- dist:
+    preset:
+    - value: null
+      weight: 1
+    - value: system-cluster-critical
+      weight: 1
+    - value: system-node-critical
+      weight: 1
+    type: weighted_preset
+  name: priority_class
+  type: String
+- dist:
+    type: constant_string
+    value: monitoring/prometheus-kube-prometheus-prometheus
+  name: prometheus
+  type: String
+- dist:
+    type: constant_string
+    value: prometheus-prometheus-kube-prometheus-prometheus-0
+  name: prometheus_replica
+  type: String
+- dist:
+    type: constant_string
+    value: prometheus-kube-state-metrics
+  name: service
+  type: String
+- dist:
+    preset:
+    - value: 438ceb9c-52bb-4988-bf02-f676fa4f25bc
+      weight: 1
+    - value: 944459b7-c814-41f1-996c-8d9f8c6630a6
+      weight: 1
+    - value: d8ed84cb-316d-4dc2-9fd5-4b58d0f46eb1
+      weight: 1
+    - value: 3a3a91a0-1fad-4111-8493-2cbdd9a32661
+      weight: 1
+    - value: b178ecfc-7cce-4640-a0c8-000da84ae66d
+      weight: 1
+    - value: 06d806d7-d72d-4cb1-8a53-ed9a3ff9cc6d
+      weight: 1
+    - value: 8770558f-692e-4355-82f8-d3cacdf354ef
+      weight: 1
+    - value: a65f62a4-a3c6-4932-8013-3de7e2a8c4e9
+      weight: 1
+    - value: 6bdfa225-b9c0-4ba9-9846-65789e0598f2
+      weight: 1
+    - value: e7b453fc-b57d-4923-9313-fa52109e1d1f
+      weight: 1
+    - value: 79dabf76-afa9-4b1a-98bb-a50d925472a1
+      weight: 1
+    - value: b2f9100d-ea63-4555-9955-b24df842b7b1
+      weight: 1
+    - value: d5571f30-c2bf-4bda-8632-05d64baa22f9
+      weight: 1
+    - value: b7c39198-eff1-4a51-a7fb-d4550f3e0702
+      weight: 1
+    - value: d06328a4-e1ad-4e34-a1a4-3e899b395bf6
+      weight: 1
+    - value: 793f6b3e-5ab1-4477-8dde-6b3a3ab4efbc
+      weight: 1
+    - value: e3274291-4a8a-4d57-a84b-fd6f6b8ac4c1
+      weight: 1
+    - value: 4d18d4a2-736c-4ae0-bd97-3b3d949f9836
+      weight: 1
+    - value: ee83cd5c-99b0-4252-9f02-80c0da28b1c9
+      weight: 1
+    - value: b2555201-3292-4f74-af79-2f6f0cdfddb5
+      weight: 1
+    type: weighted_preset
+  name: uid
+  type: String

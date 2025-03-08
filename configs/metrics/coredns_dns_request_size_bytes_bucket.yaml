@@ -1,0 +1,131 @@
+end: '2021-01-01T00:00:00Z'
+fields:
+- dist:
+    lower_bound: 1
+    step: 10
+    type: mono_inc
+    upper_bound: 1000
+  name: greptime_value
+  type: Float
+interval: 30
+precision: 1000
+start: '2021-01-01T00:00:00Z'
+tags:
+- dist:
+    type: constant_string
+    value: eks-us-east-1-qa1
+  name: cluster
+  type: String
+- dist:
+    type: constant_string
+    value: coredns
+  name: container
+  type: String
+- dist:
+    type: constant_string
+    value: http-metrics
+  name: endpoint
+  type: String
+- dist:
+    type: constant_string
+    value: qa
+  name: env
+  type: String
+- dist:
+    type: constant_string
+    value: 'false'
+  name: holiday
+  type: String
+- dist:
+    preset:
+    - value: 10.0.167.225:9153
+      weight: 1
+    - value: 10.0.164.0:9153
+      weight: 1
+    type: weighted_preset
+  name: instance
+  type: String
+- dist:
+    type: constant_string
+    value: coredns
+  name: job
+  type: String
+- dist:
+    preset:
+    - value: '2047'
+      weight: 1
+    - value: '200'
+      weight: 1
+    - value: '1023'
+      weight: 1
+    - value: '511'
+      weight: 1
+    - value: '64000'
+      weight: 1
+    - value: '8291'
+      weight: 1
+    - value: '32000'
+      weight: 1
+    - value: '48000'
+      weight: 1
+    - value: '0'
+      weight: 1
+    - value: '16000'
+      weight: 1
+    - value: '100'
+      weight: 1
+    - value: +Inf
+      weight: 1
+    - value: '300'
+      weight: 1
+    - value: '4095'
+      weight: 1
+    - value: '400'
+      weight: 1
+    type: weighted_preset
+  name: le
+  type: String
+- dist:
+    type: constant_string
+    value: kube-system
+  name: namespace
+  type: String
+- dist:
+    preset:
+    - value: coredns-586b798467-sbb7w
+      weight: 1
+    - value: coredns-586b798467-mj7f7
+      weight: 1
+    type: weighted_preset
+  name: pod
+  type: String
+- dist:
+    type: constant_string
+    value: monitoring/prometheus-kube-prometheus-prometheus
+  name: prometheus
+  type: String
+- dist:
+    type: constant_string
+    value: prometheus-prometheus-kube-prometheus-prometheus-0
+  name: prometheus_replica
+  type: String
+- dist:
+    type: constant_string
+    value: udp
+  name: proto
+  type: String
+- dist:
+    type: constant_string
+    value: dns://:53
+  name: server
+  type: String
+- dist:
+    type: constant_string
+    value: prometheus-kube-prometheus-coredns
+  name: service
+  type: String
+- dist:
+    type: constant_string
+    value: .
+  name: zone
+  type: String

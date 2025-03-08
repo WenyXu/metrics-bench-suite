@@ -1,0 +1,219 @@
+end: '2021-01-01T00:00:00Z'
+fields:
+- dist:
+    lower_bound: 1
+    step: 10
+    type: mono_inc
+    upper_bound: 1000
+  name: greptime_value
+  type: Float
+interval: 30
+precision: 1000
+start: '2021-01-01T00:00:00Z'
+tags:
+- dist:
+    type: constant_string
+    value: eks-us-east-1-qa1
+  name: cluster
+  type: String
+- dist:
+    preset:
+    - value: https-metrics
+      weight: 1
+    - value: http-metrics
+      weight: 1
+    - value: https
+      weight: 1
+    type: weighted_preset
+  name: endpoint
+  type: String
+- dist:
+    type: constant_string
+    value: qa
+  name: env
+  type: String
+- dist:
+    type: constant_string
+    value: 'false'
+  name: holiday
+  type: String
+- dist:
+    preset:
+    - value: 55A39307B0BACDE147313257BFF3C5EA.gr7.us-east-1.eks.amazonaws.com
+      weight: 1
+    - value: 55a39307b0bacde147313257bff3c5ea.gr7.us-east-1.eks.amazonaws.com
+      weight: 1
+    - value: '[::1]:443'
+      weight: 1
+    - value: localhost:10277
+      weight: 1
+    - value: localhost:21362
+      weight: 1
+    - value: 127.0.0.1:9443
+      weight: 1
+    - value: 127.0.0.1:23443
+      weight: 1
+    - value: karpenter.karpenter.svc:8443
+      weight: 1
+    type: weighted_preset
+  name: host
+  type: String
+- dist:
+    preset:
+    - value: 10.0.169.179:10250
+      weight: 1
+    - value: 10.0.162.53:10249
+      weight: 1
+    - value: 10.0.161.185:443
+      weight: 1
+    - value: 10.0.166.131:10250
+      weight: 1
+    - value: 10.0.162.77:10249
+      weight: 1
+    - value: 10.0.169.179:10249
+      weight: 1
+    - value: 10.0.166.131:10249
+      weight: 1
+    - value: 10.0.175.164:10250
+      weight: 1
+    - value: 10.0.162.53:10250
+      weight: 1
+    - value: 10.0.162.77:10250
+      weight: 1
+    - value: 10.0.180.195:443
+      weight: 1
+    - value: 10.0.175.164:10249
+      weight: 1
+    type: weighted_preset
+  name: instance
+  type: String
+- dist:
+    preset:
+    - value: kubelet
+      weight: 1
+    - value: kube-proxy
+      weight: 1
+    - value: apiserver
+      weight: 1
+    type: weighted_preset
+  name: job
+  type: String
+- dist:
+    preset:
+    - value: '1'
+      weight: 1
+    - value: '0.1'
+      weight: 1
+    - value: '60'
+      weight: 1
+    - value: '0.5'
+      weight: 1
+    - value: '2'
+      weight: 1
+    - value: '15'
+      weight: 1
+    - value: '0.025'
+      weight: 1
+    - value: '0.25'
+      weight: 1
+    - value: '8'
+      weight: 1
+    - value: '4'
+      weight: 1
+    - value: '0.005'
+      weight: 1
+    - value: +Inf
+      weight: 1
+    - value: '30'
+      weight: 1
+    type: weighted_preset
+  name: le
+  type: String
+- dist:
+    preset:
+    - value: /metrics
+      weight: 1
+    - value: null
+      weight: 1
+    type: weighted_preset
+  name: metrics_path
+  type: String
+- dist:
+    preset:
+    - value: kube-system
+      weight: 1
+    - value: default
+      weight: 1
+    type: weighted_preset
+  name: namespace
+  type: String
+- dist:
+    preset:
+    - value: ip-10-0-169-179.ec2.internal
+      weight: 1
+    - value: null
+      weight: 1
+    - value: ip-10-0-166-131.ec2.internal
+      weight: 1
+    - value: ip-10-0-175-164.ec2.internal
+      weight: 1
+    - value: ip-10-0-162-53.ec2.internal
+      weight: 1
+    - value: ip-10-0-162-77.ec2.internal
+      weight: 1
+    type: weighted_preset
+  name: node
+  type: String
+- dist:
+    preset:
+    - value: null
+      weight: 1
+    - value: kube-proxy-vrnnh
+      weight: 1
+    - value: kube-proxy-vccv8
+      weight: 1
+    - value: kube-proxy-htsdp
+      weight: 1
+    - value: kube-proxy-9r8vq
+      weight: 1
+    - value: kube-proxy-5q9j4
+      weight: 1
+    type: weighted_preset
+  name: pod
+  type: String
+- dist:
+    type: constant_string
+    value: monitoring/prometheus-kube-prometheus-prometheus
+  name: prometheus
+  type: String
+- dist:
+    type: constant_string
+    value: prometheus-prometheus-kube-prometheus-prometheus-0
+  name: prometheus_replica
+  type: String
+- dist:
+    preset:
+    - value: prometheus-kube-prometheus-kubelet
+      weight: 1
+    - value: prometheus-kube-prometheus-kube-proxy
+      weight: 1
+    - value: kubernetes
+      weight: 1
+    type: weighted_preset
+  name: service
+  type: String
+- dist:
+    preset:
+    - value: POST
+      weight: 1
+    - value: PATCH
+      weight: 1
+    - value: PUT
+      weight: 1
+    - value: GET
+      weight: 1
+    - value: DELETE
+      weight: 1
+    type: weighted_preset
+  name: verb
+  type: String
