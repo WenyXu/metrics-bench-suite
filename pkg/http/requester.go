@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 
 	"github.com/golang/snappy"
@@ -31,6 +32,7 @@ func (r *Requester) Send(writeRequest prompb.WriteRequest) error {
 		return err
 	}
 	compressedData := snappy.Encode(nil, protobufData)
+	log.Printf("Sending %d bytes", len(compressedData))
 	req, err := http.NewRequest("POST", r.URL, bytes.NewBuffer(compressedData))
 	if err != nil {
 		return fmt.Errorf("failed to create HTTP request: %v", err)
