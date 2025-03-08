@@ -25,7 +25,6 @@
 
 /bin/*
 /output/*
-/assets/*
 /output/*
 /traceflow_output/*
 /tcpflow_output/*
