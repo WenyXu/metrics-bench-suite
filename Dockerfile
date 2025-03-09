@@ -9,6 +9,7 @@ RUN make
 FROM ubuntu:22.04 as base
 
 WORKDIR /metrics-loader
+COPY configs /configs
 COPY --from=builder /metrics-loader/bin/sample_loader /usr/local/bin/
 
 ENTRYPOINT ["sample_loader"]
