@@ -122,6 +122,55 @@ func (d Distribution) LabelGenerator() LabelGenerator {
 	return nil
 }
 
+// SetNDV sets the number of distinct values for the distribution
+func (d *Distribution) SetNDV(ndv int) {
+	distributionType, err := parseDistributionTypeFromString(d.Type)
+	if err != nil {
+		log.Fatalf("invalid distribution type: %s", d.Type)
+	}
+
+	switch distributionType {
+	case weightedPresetType:
+		l := min(ndv, len(d.Preset))
+		preset := make([]PresetItem, 0)
+		for i := 0; i < l; i++ {
+			if d.Preset[i].Value != "" {
+				preset = append(preset, d.Preset[i])
+			}
+		}
+		d.Preset = preset
+	case constantStringType:
+		return
+	case replicaType:
+		*d.Replica = ndv
+	}
+}
+
+// SetReplica sets the number of distinct values for the distribution.
+func (d *Distribution) SetReplica(ndv int, prefix string) {
+	distributionType, err := parseDistributionTypeFromString(d.Type)
+	if err != nil {
+		log.Fatalf("invalid distribution type: %s", d.Type)
+	}
+
+	switch distributionType {
+	case weightedPresetType:
+		l := min(ndv, len(d.Preset))
+		preset := make([]PresetItem, 0)
+		for i := 0; i < l; i++ {
+			preset = append(preset, PresetItem{
+				Value:  fmt.Sprintf("%s%d", prefix, i),
+				Weight: 1,
+			})
+		}
+		d.Preset = preset
+	case constantStringType:
+		return
+	case replicaType:
+		*d.Replica = ndv
+	}
+}
+
 // FieldDistributionType is a type that represents a distribution type for a field.
 type FieldDistributionType int
 

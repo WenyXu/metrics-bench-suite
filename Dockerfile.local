@@ -1,0 +1,5 @@
+FROM ubuntu:22.04
+
+COPY sample_loader /usr/local/bin/
+
+ENTRYPOINT ["sample_loader"]

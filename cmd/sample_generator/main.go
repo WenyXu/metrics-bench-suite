@@ -4,10 +4,8 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"io/fs"
 	"log"
 	"os"
-	"path/filepath"
 
 	"time"
 
@@ -16,7 +14,6 @@ import (
 
 	"github.com/prometheus/prometheus/prompb"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v3"
 )
 
 // SampleGenerator is a struct that generates samples from a config file
@@ -30,68 +27,10 @@ type SampleGenerator struct {
 	RemoteWriteURL string
 }
 
-type fileConfig struct {
-	Name   string
-	Config samples.Config
-}
-
 type metric struct {
 	Name   string
 	Series []map[string]string
 	Fields []samples.FloatGenerator
-}
-
-func getFileNameWithoutExt(path string) string {
-	base := filepath.Base(path)
-	ext := filepath.Ext(base)
-	return base[:len(base)-len(ext)]
-}
-
-func walkAndParseConfig(path string) ([]fileConfig, error) {
-	var fileConfigs []fileConfig
-
-	err := filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if !d.IsDir() && (filepath.Ext(path) == ".yaml" || filepath.Ext(path) == ".yml") {
-			fmt.Println("Parsing file:", path)
-
-			data, err := parseYAML(path)
-			if err != nil {
-				log.Printf("Error parsing YAML file %s: %v\n", path, err)
-				return nil
-			}
-
-			name := getFileNameWithoutExt(path)
-			fileConfigs = append(fileConfigs, fileConfig{
-				Name:   name,
-				Config: data,
-			})
-		}
-		return nil
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	return fileConfigs, nil
-}
-
-func parseYAML(path string) (samples.Config, error) {
-	var config samples.Config
-	yamlFile, err := os.ReadFile(path)
-	if err != nil {
-		return samples.Config{}, err
-	}
-
-	err = yaml.Unmarshal(yamlFile, &config)
-	if err != nil {
-		return samples.Config{}, err
-	}
-
-	return config, nil
 }
 
 func (s *SampleGenerator) run(cmd *cobra.Command, args []string) error {
@@ -135,7 +74,7 @@ func (s *SampleGenerator) run(cmd *cobra.Command, args []string) error {
 	log.Printf("Config path: %s", s.ConfigPath)
 	log.Printf("Output: %s", s.Output)
 
-	fileConfigs, err := walkAndParseConfig(s.ConfigPath)
+	fileConfigs, err := samples.WalkAndParseConfig(s.ConfigPath)
 	if err != nil {
 		return err
 	}
@@ -144,6 +83,7 @@ func (s *SampleGenerator) run(cmd *cobra.Command, args []string) error {
 	}
 
 	log.Printf("Generating metrics...")
+	totalCount := 0
 	metrics := make([]metric, len(fileConfigs))
 	for i, fileConfig := range fileConfigs {
 		labels := make([]samples.Label, 0)
@@ -156,7 +96,7 @@ func (s *SampleGenerator) run(cmd *cobra.Command, args []string) error {
 		}
 
 		log.Printf("Process %s", fileConfig.Name)
-		tagSet := samples.TagSetPermutation(labels)
+		tagSet := samples.TagSetPermutation(labels, &totalCount)
 		fields := make([]samples.FloatGenerator, 0)
 		field := fileConfig.Config.Fields[0]
 		for range len(tagSet) {
@@ -168,6 +108,8 @@ func (s *SampleGenerator) run(cmd *cobra.Command, args []string) error {
 			Fields: fields,
 		}
 	}
+
+	log.Printf("total time series: %d, for %d metrics", totalCount, len(metrics))
 
 	wr := convertToRemoteWriteRequest(metrics, s.StartDate, s.EndDate, s.Interval)
 

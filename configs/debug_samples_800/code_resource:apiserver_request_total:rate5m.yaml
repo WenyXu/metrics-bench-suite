@@ -1,0 +1,108 @@
+start: "2021-01-01T00:00:00Z"
+end: "2021-01-01T00:00:00Z"
+interval: 30
+tags:
+    - name: cluster
+      type: String
+      dist:
+        type: constant_string
+        value: eks-us-east-1-qa1
+    - name: code
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: "404"
+              weight: 1
+            - value: "200"
+              weight: 1
+            - value: "201"
+              weight: 1
+            - value: "304"
+              weight: 1
+            - value: "409"
+              weight: 1
+            - value: "500"
+              weight: 1
+    - name: env
+      type: String
+      dist:
+        type: constant_string
+        value: qa
+    - name: holiday
+      type: String
+      dist:
+        type: constant_string
+        value: "false"
+    - name: prometheus
+      type: String
+      dist:
+        type: constant_string
+        value: monitoring/prometheus-kube-prometheus-prometheus
+    - name: prometheus_replica
+      type: String
+      dist:
+        type: constant_string
+        value: prometheus-prometheus-kube-prometheus-prometheus-0
+    - name: resource
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: csinodes
+              weight: 1
+            - value: nodepools
+              weight: 1
+            - value: roles
+              weight: 1
+            - value: subjectaccessreviews
+              weight: 1
+            - value: nodeclaims
+              weight: 1
+            - value: clusterroles
+              weight: 1
+            - value: pods
+              weight: 1
+            - value: workfloweventbindings
+              weight: 1
+            - value: statefulsets
+              weight: 1
+            - value: daemonsets
+              weight: 1
+            - value: nodes
+              weight: 1
+            - value: networkpolicies
+              weight: 1
+            - value: ""
+              weight: 1
+            - value: rolebindings
+              weight: 1
+            - value: volumeattachments
+              weight: 1
+            - value: certificatesigningrequests
+              weight: 1
+            - value: validatingwebhookconfigurations
+              weight: 1
+            - value: events
+              weight: 1
+            - value: probes
+              weight: 1
+            - value: cninodes
+              weight: 1
+    - name: verb
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: verb0
+              weight: 1
+            - value: verb1
+              weight: 1
+fields:
+    - name: greptime_value
+      type: Float
+      dist:
+        type: mono_inc
+        lower_bound: 1
+        upper_bound: 1000
+        step: 10

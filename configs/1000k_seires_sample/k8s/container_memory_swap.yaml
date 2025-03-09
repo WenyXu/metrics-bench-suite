@@ -1,0 +1,12 @@
+start: "2021-01-01T00:00:00Z"
+end: "2021-01-01T00:00:00Z"
+interval: 30
+tags: []
+fields:
+    - name: greptime_value
+      type: Float
+      dist:
+        type: mono_inc
+        lower_bound: 1
+        upper_bound: 1000
+        step: 10
