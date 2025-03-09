@@ -48,6 +48,8 @@ var largeSeriesMetrics = []string{
 	"process_resident_memory_bytes",
 	"rest_client_requests_total",
 	"up",
+	"process_resident_memory_bytes",
+	"kube_node_status_allocatable",
 }
 
 func (c *ConfigModifier) run(cmd *cobra.Command, args []string) error {
@@ -193,9 +195,9 @@ func main() {
 	}
 	rootCmd.Flags().StringP("config", "c", "", "The path to the config file")
 	rootCmd.Flags().StringP("output", "o", "", "The output file")
-	rootCmd.Flags().IntP("num-pods", "p", 4, "The number of pods")
-	rootCmd.Flags().IntP("num-nodes", "n", 8, "The number of nodes")
-	rootCmd.Flags().IntP("num-instances", "i", 8, "The number of instances")
+	rootCmd.Flags().IntP("num-pods", "p", 2, "The number of pods")
+	rootCmd.Flags().IntP("num-nodes", "n", 5, "The number of nodes")
+	rootCmd.Flags().IntP("num-instances", "i", 5, "The number of instances")
 	rootCmd.Flags().IntP("num-namespaces", "N", 50, "The number of namespaces")
 	rootCmd.Flags().IntP("num-workloads", "w", 4, "The number of workloads")
 	rootCmd.Flags().IntP("target-series", "t", 10000, "The target time series number for each metric")

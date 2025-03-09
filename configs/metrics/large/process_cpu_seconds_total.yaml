@@ -1,0 +1,257 @@
+end: '2021-01-01T00:00:00Z'
+fields:
+- dist:
+    lower_bound: 1
+    step: 10
+    type: mono_inc
+    upper_bound: 1000
+  name: greptime_value
+  type: Float
+interval: 30
+precision: 1000
+start: '2021-01-01T00:00:00Z'
+tags:
+- dist:
+    preset:
+    - value: null
+      weight: 1
+    - value: vmstorage
+      weight: 1
+    - value: vminsert
+      weight: 1
+    - value: vmselect
+      weight: 1
+    type: weighted_preset
+  name: app
+  type: String
+- dist:
+    preset:
+    - value: controller
+      weight: 1
+    type: weighted_preset
+  name: app_kubernetes_io_component
+  type: String
+- dist:
+    preset:
+    - value: Helm
+      weight: 1
+    type: weighted_preset
+  name: app_kubernetes_io_managed_by
+  type: String
+- dist:
+    preset:
+    - value: ingress-nginx
+      weight: 1
+    type: weighted_preset
+  name: app_kubernetes_io_name
+  type: String
+- dist:
+    preset:
+    - value: ingress-nginx
+      weight: 1
+    type: weighted_preset
+  name: app_kubernetes_io_part_of
+  type: String
+- dist:
+    preset:
+    - value: 1.9.4
+      weight: 1
+    type: weighted_preset
+  name: app_kubernetes_io_version
+  type: String
+- dist:
+    type: constant_string
+    value: eks-us-east-1-qa1
+  name: cluster
+  type: String
+- dist:
+    preset:
+    - value: etcd
+      weight: 1
+    type: weighted_preset
+  name: container
+  type: String
+- dist:
+    preset:
+    - value: https
+      weight: 1
+    type: weighted_preset
+  name: endpoint
+  type: String
+- dist:
+    type: constant_string
+    value: qa
+  name: env
+  type: String
+- dist:
+    type: constant_string
+    value: 'false'
+  name: holiday
+  type: String
+- dist:
+    preset:
+    - value: ip-10-0-162-53.ec2.internal
+      weight: 1
+    type: weighted_preset
+  name: hostname
+  type: String
+- dist:
+    preset:
+    - value: 10.0.169.75:2379
+      weight: 1
+    - value: 10.0.169.179:10249
+      weight: 1
+    - value: 10.0.170.35:4000
+      weight: 1
+    - value: 10.0.168.66:4000
+      weight: 1
+    - value: 10.0.166.220:2379
+      weight: 1
+    - value: 10.0.174.148:8482
+      weight: 1
+    - value: 10.0.175.117:4000
+      weight: 1
+    - value: 10.0.164.0:9153
+      weight: 1
+    - value: 10.0.166.41:9090
+      weight: 1
+    - value: 10.0.161.41:4000
+      weight: 1
+    - value: 10.0.162.77:10250
+      weight: 1
+    - value: 10.0.166.131:10249
+      weight: 1
+    - value: 10.0.162.77:10249
+      weight: 1
+    - value: 10.0.174.40:10254
+      weight: 1
+    - value: 10.0.163.65:4000
+      weight: 1
+    - value: 10.0.169.66:4000
+      weight: 1
+    - value: 10.0.162.53:9100
+      weight: 1
+    - value: 10.0.166.131:9100
+      weight: 1
+    - value: 10.0.166.131:10250
+      weight: 1
+    - value: 10.0.172.86:10254
+      weight: 1
+    type: weighted_preset
+  name: instance
+  type: String
+- dist:
+    preset:
+    - value: null
+      weight: 1
+    - value: t4g.large
+      weight: 1
+    type: weighted_preset
+  name: instance_type
+  type: String
+- dist:
+    preset:
+    - value: kube-proxy
+      weight: 1
+    - value: kubernetes-endpoints
+      weight: 1
+    - value: coredns
+      weight: 1
+    - value: kubelet
+      weight: 1
+    - value: node-exporter
+    type: weighted_preset
+  name: job
+  type: String
+- dist:
+    preset:
+    - value: victoria-metrics-cluster-vmstorage
+      weight: 1
+    type: weighted_preset
+  name: kubernetes_name
+  type: String
+- dist:
+    preset:
+    - value: namespace-1
+      weight: 1
+    type: weighted_preset
+  name: kubernetes_namespace
+  type: String
+- dist:
+    preset:
+    - value: pod-1
+      weight: 1
+    type: weighted_preset
+  name: kubernetes_pod_name
+  type: String
+- dist:
+    preset:
+    - value: /metrics
+      weight: 1
+    type: weighted_preset
+  name: metrics_path
+  type: String
+- dist:
+    preset:
+    - value: etcd
+      weight: 1
+    type: weighted_preset
+  name: namespace
+  type: String
+- dist:
+    preset:
+    - value: null
+      weight: 1
+    - value: ip-10-0-162-77.ec2.internal
+      weight: 1
+    - value: ip-10-0-166-131.ec2.internal
+      weight: 1
+    - value: ip-10-0-169-179.ec2.internal
+      weight: 1
+    - value: ip-10-0-175-164.ec2.internal
+      weight: 1
+    - value: ip-10-0-162-53.ec2.internal
+      weight: 1
+    type: weighted_preset
+  name: node
+  type: String
+- dist:
+    preset:
+    - value: etcd-0
+      weight: 1
+    type: weighted_preset
+  name: pod
+  type: String
+- dist:
+    type: constant_string
+    value: monitoring/prometheus-kube-prometheus-prometheus
+  name: prometheus
+  type: String
+- dist:
+    type: constant_string
+    value: prometheus-prometheus-kube-prometheus-prometheus-0
+  name: prometheus_replica
+  type: String
+- dist:
+    preset:
+    - value: null
+      weight: 1
+    - value: us-east-1
+      weight: 1
+    type: weighted_preset
+  name: region
+  type: String
+- dist:
+    preset:
+    - value: service-1
+      weight: 1
+    type: weighted_preset
+  name: service
+  type: String
+- dist:
+    preset:
+    - value: us-east-1a
+      weight: 1
+    type: weighted_preset
+  name: zone
+  type: String

@@ -71,8 +71,6 @@ tags:
   type: String
 - dist:
     preset:
-    - value: null
-      weight: 1
     - value: gcrm
       weight: 1
     type: weighted_preset
@@ -80,8 +78,6 @@ tags:
   type: String
 - dist:
     preset:
-    - value: null
-      weight: 1
     - value: gcrm-c9598d7f-hrrv2
       weight: 1
     type: weighted_preset
@@ -118,52 +114,12 @@ tags:
     preset:
     - value: /metrics
       weight: 1
-    - value: null
-      weight: 1
     type: weighted_preset
   name: metrics_path
   type: String
 - dist:
     preset:
     - value: DynamicCABundle-client-ca-bundle
-      weight: 1
-    - value: DynamicCABundle-serving-cert
-      weight: 1
-    - value: APIServiceRegistrationController
-      weight: 1
-    - value: crd_finalizer
-      weight: 1
-    - value: priority_and_fairness_config_queue
-      weight: 1
-    - value: DynamicClientCertificate
-      weight: 1
-    - value: clouddatabase
-      weight: 1
-    - value: autoregister
-      weight: 1
-    - value: open_api_aggregation_controller
-      weight: 1
-    - value: crd_autoregistration_controller
-      weight: 1
-    - value: kubelet_log_rotate_manager
-      weight: 1
-    - value: kubernetes_api_approval_conformant_condition_controller
-      weight: 1
-    - value: cluster_authentication_trust_controller
-      weight: 1
-    - value: discovery-manager
-      weight: 1
-    - value: DynamicCABundle-request-header
-      weight: 1
-    - value: DiscoveryController
-      weight: 1
-    - value: crd_openapi_controller
-      weight: 1
-    - value: admission_quota_controller
-      weight: 1
-    - value: DynamicServingCertificateController
-      weight: 1
-    - value: non_structural_schema_condition_controller
       weight: 1
     type: weighted_preset
   name: name
