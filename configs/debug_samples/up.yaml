@@ -84,7 +84,7 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 2
+        replica: 1
         replica_prefix: instance-
     - name: instance_type
       type: String
@@ -138,19 +138,19 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 5
+        replica: 1
         replica_prefix: app-
     - name: node
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 1
         replica_prefix: node-
     - name: pod
       type: String
       dist:
         type: replica_string
-        replica: 2
+        replica: 1
         replica_prefix: pod-
     - name: prometheus
       type: String
