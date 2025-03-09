@@ -10,6 +10,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// FileConfig represents a parsed YAML configuration file
 type FileConfig struct {
 	Name   string
 	Config Config

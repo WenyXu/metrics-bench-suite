@@ -12,6 +12,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// SampleLoader is a tool that generate samples from config files and send them to the remote write endpoint.
 type SampleLoader struct {
 	ConfigPath     string
 	RemoteWriteURL string

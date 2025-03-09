@@ -146,6 +146,7 @@ func (d *Distribution) SetNDV(ndv int) {
 	}
 }
 
+// SetReplica sets the number of distinct values for the distribution.
 func (d *Distribution) SetReplica(ndv int, prefix string) {
 	distributionType, err := parseDistributionTypeFromString(d.Type)
 	if err != nil {

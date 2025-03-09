@@ -13,6 +13,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// ConfigModifier is a tool that modifies the config file to meet the target time series number.
 type ConfigModifier struct {
 	ConfigPath    string
 	OutputPath    string
