@@ -1,0 +1,109 @@
+end: '2021-01-01T00:00:00Z'
+fields:
+- dist:
+    lower_bound: 1
+    step: 10
+    type: mono_inc
+    upper_bound: 1000
+  name: greptime_value
+  type: Float
+interval: 30
+precision: 1000
+start: '2021-01-01T00:00:00Z'
+tags:
+- dist:
+    type: constant_string
+    value: eks-us-east-1-qa1
+  name: cluster
+  type: String
+- dist:
+    preset:
+    - value: '404'
+      weight: 1
+    - value: '200'
+      weight: 1
+    - value: '201'
+      weight: 1
+    - value: '304'
+      weight: 1
+    - value: '409'
+      weight: 1
+    - value: '500'
+      weight: 1
+    type: weighted_preset
+  name: code
+  type: String
+- dist:
+    type: constant_string
+    value: qa
+  name: env
+  type: String
+- dist:
+    type: constant_string
+    value: 'false'
+  name: holiday
+  type: String
+- dist:
+    type: constant_string
+    value: monitoring/prometheus-kube-prometheus-prometheus
+  name: prometheus
+  type: String
+- dist:
+    type: constant_string
+    value: prometheus-prometheus-kube-prometheus-prometheus-0
+  name: prometheus_replica
+  type: String
+- dist:
+    preset:
+    - value: csinodes
+      weight: 1
+    - value: nodepools
+      weight: 1
+    - value: roles
+      weight: 1
+    - value: subjectaccessreviews
+      weight: 1
+    - value: nodeclaims
+      weight: 1
+    - value: clusterroles
+      weight: 1
+    - value: pods
+      weight: 1
+    - value: workfloweventbindings
+      weight: 1
+    - value: statefulsets
+      weight: 1
+    - value: daemonsets
+      weight: 1
+    - value: nodes
+      weight: 1
+    - value: networkpolicies
+      weight: 1
+    - value: null
+      weight: 1
+    - value: rolebindings
+      weight: 1
+    - value: volumeattachments
+      weight: 1
+    - value: certificatesigningrequests
+      weight: 1
+    - value: validatingwebhookconfigurations
+      weight: 1
+    - value: events
+      weight: 1
+    - value: probes
+      weight: 1
+    - value: cninodes
+      weight: 1
+    type: weighted_preset
+  name: resource
+  type: String
+- dist:
+    preset:
+    - value: read
+      weight: 1
+    - value: write
+      weight: 1
+    type: weighted_preset
+  name: verb
+  type: String
