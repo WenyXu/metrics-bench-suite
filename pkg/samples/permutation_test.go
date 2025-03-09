@@ -13,6 +13,8 @@ func TestTagSetPermutation(t *testing.T) {
 		{Name: "label3", Values: []string{"value5", "value6"}},
 	}
 
-	permutations := TagSetPermutation(metrics)
+	total := 0
+	permutations := TagSetPermutation(metrics, &total)
 	assert.Equal(t, len(permutations), 8)
+	assert.Equal(t, total, 8)
 }

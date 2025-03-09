@@ -9,7 +9,7 @@ type Label struct {
 }
 
 // TagSetPermutation generates all possible permutations of tag sets.
-func TagSetPermutation(labels []Label) []map[string]string {
+func TagSetPermutation(labels []Label, totalCount *int) []map[string]string {
 	Set := make(map[string][]string)
 	for _, label := range labels {
 		Set[label.Name] = label.Values
@@ -27,6 +27,7 @@ func TagSetPermutation(labels []Label) []map[string]string {
 		count *= len(v)
 	}
 	fmt.Println("number of tag combinations:", count)
+	*totalCount += count
 
 	var permutations []map[string]string
 	generatePermutations(keys, values, map[string]string{}, &permutations, 0)
