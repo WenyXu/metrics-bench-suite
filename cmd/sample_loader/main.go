@@ -117,8 +117,6 @@ func (s *SampleLoader) run(cmd *cobra.Command, args []string) error {
 
 	log.Printf("total time series: %d, for %d metrics", totalSeries, len(metrics))
 
-	current := s.StartDate
-
 	ticker := time.NewTicker(s.TickInterval)
 	defer ticker.Stop()
 
@@ -130,11 +128,16 @@ func (s *SampleLoader) run(cmd *cobra.Command, args []string) error {
 		go worker(i, s.RemoteWriteURL, requestChan, &wg)
 	}
 
+	current := s.StartDate
+	if s.Infinite {
+		current = time.Now()
+	}
+
 	for range ticker.C {
 		log.Printf("Generating samples for %s", current)
 		convertToRemoteWriteRequests(metrics, current, s.MaxSamples, requestChan)
+		current = current.Add(s.Interval)
 		if !s.Infinite {
-			current = current.Add(s.Interval)
 			if current.After(s.EndDate) {
 				log.Printf("End date reached, stopping")
 				break
