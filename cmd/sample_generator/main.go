@@ -1,11 +1,9 @@
 package main
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
 	"time"
 
@@ -14,6 +12,9 @@ import (
 
 	"github.com/prometheus/prometheus/prompb"
 	"github.com/spf13/cobra"
+	"github.com/xitongsys/parquet-go-source/local"
+	"github.com/xitongsys/parquet-go/parquet"
+	"github.com/xitongsys/parquet-go/writer"
 )
 
 // SampleGenerator is a struct that generates samples from a config file
@@ -25,6 +26,8 @@ type SampleGenerator struct {
 	Seed           int
 	Output         string
 	RemoteWriteURL string
+	Database       string
+	Table          string
 }
 
 type metric struct {
@@ -66,7 +69,14 @@ func (s *SampleGenerator) run(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-
+	s.Database, err = cmd.Flags().GetString("database")
+	if err != nil {
+		return err
+	}
+	s.Table, err = cmd.Flags().GetString("table")
+	if err != nil {
+		return err
+	}
 	log.Printf("Start date: %s", s.StartDate)
 	log.Printf("End date: %s", s.EndDate)
 	log.Printf("Interval: %s", s.Interval)
@@ -121,28 +131,50 @@ func (s *SampleGenerator) run(cmd *cobra.Command, args []string) error {
 		}
 	} else {
 		log.Printf("Saving metrics to file...")
-		file, err := os.Create(s.Output)
+		err = writeToParquet(wr.Timeseries, s.fileName())
 		if err != nil {
 			return err
 		}
-		defer file.Close()
+	}
 
-		writer := bufio.NewWriter(file)
-		for _, ts := range wr.Timeseries {
-			str, err := json.Marshal(ts)
-			if err != nil {
-				return err
-			}
-			_, err = writer.WriteString(string(str))
-			if err != nil {
-				return err
-			}
-			_, err = writer.WriteString("\n")
-			if err != nil {
-				return err
-			}
+	return nil
+}
+
+type row struct {
+	Value string `parquet:"name=value, type=BYTE_ARRAY, convertedtype=UTF8"`
+}
+
+func writeToParquet(timeseries []prompb.TimeSeries, output string) error {
+	parquetFile, err := local.NewLocalFileWriter(output)
+	if err != nil {
+		return err
+	}
+	defer parquetFile.Close()
+
+	parquetWriter, err := writer.NewParquetWriter(parquetFile, new(row), 1)
+	if err != nil {
+		return err
+	}
+
+	parquetWriter.RowGroupSize = 102400
+	parquetWriter.PageSize = 1024 * 1024
+	parquetWriter.CompressionType = parquet.CompressionCodec_ZSTD
+	for _, ts := range timeseries {
+		json, err := json.Marshal(ts)
+		if err != nil {
+			return err
 		}
-		writer.Flush()
+		err = parquetWriter.Write(row{Value: string(json)})
+		if err != nil {
+			return err
+		}
+	}
+
+	if err := parquetWriter.WriteStop(); err != nil {
+		return err
+	}
+	if err := parquetFile.Close(); err != nil {
+		return err
 	}
 
 	return nil
@@ -192,6 +224,14 @@ func convertToRemoteWriteRequest(metrics []metric, start time.Time, end time.Tim
 	}
 }
 
+var timeFormat = "2006-01-02T150405Z"
+
+func (s *SampleGenerator) fileName() string {
+	startDate := s.StartDate.Format(timeFormat)
+	endDate := s.EndDate.Format(timeFormat)
+	return fmt.Sprintf("%s.%s-[%s-%s].%s", s.Database, s.Table, startDate, endDate, "parquet")
+}
+
 func main() {
 	sampleGenerator := &SampleGenerator{}
 
@@ -205,6 +245,8 @@ func main() {
 		},
 	}
 
+	rootCmd.Flags().StringP("database", "d", "public", "The database name")
+	rootCmd.Flags().StringP("table", "t", "greptime_physical_table", "The table name")
 	rootCmd.Flags().StringP("config", "c", "", "The path to the config file")
 	rootCmd.Flags().StringP("interval", "i", "30s", "The interval of the loading data")
 	rootCmd.Flags().StringP("start-date", "", "2025-01-01T00:00:00Z", "The start date of the data")

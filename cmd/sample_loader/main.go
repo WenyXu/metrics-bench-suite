@@ -22,6 +22,7 @@ type SampleLoader struct {
 	Seed           int
 	MaxSamples     int
 	TickInterval   time.Duration
+	Workers        int
 }
 
 type metric struct {
@@ -61,6 +62,10 @@ func (s *SampleLoader) run(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	s.TickInterval, err = time.ParseDuration(tickIntervalStr)
+	if err != nil {
+		return err
+	}
+	s.Workers, err = cmd.Flags().GetInt("workers")
 	if err != nil {
 		return err
 	}
@@ -127,25 +132,34 @@ func (s *SampleLoader) run(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func (s *SampleLoader) sendRequest(request prompb.WriteRequest) error {
-	r := http.NewRequester(s.RemoteWriteURL)
-	return r.Send(request)
+func worker(id int, url string, request <-chan prompb.WriteRequest, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for request := range request {
+		now := time.Now()
+		r := http.NewRequester(url)
+		err := r.Send(request)
+		if err != nil {
+			log.Printf("worker %d failed to send write request: %v", id, err)
+		}
+		log.Printf("worker %d sent request in %s", id, time.Since(now))
+	}
 }
 
 func (s *SampleLoader) sendRequests(requests []prompb.WriteRequest, totalSeries int) error {
 	wg := sync.WaitGroup{}
 	now := time.Now()
 	total := len(requests)
-	for _, request := range requests {
+
+	requestChan := make(chan prompb.WriteRequest, s.Workers)
+	for i := 0; i < s.Workers; i++ {
 		wg.Add(1)
-		go func(request prompb.WriteRequest) {
-			defer wg.Done()
-			err := s.sendRequest(request)
-			if err != nil {
-				log.Printf("failed to send write request: %v", err)
-			}
-		}(request)
+		go worker(i, s.RemoteWriteURL, requestChan, &wg)
 	}
+
+	for _, request := range requests {
+		requestChan <- request
+	}
+	close(requestChan)
 	wg.Wait()
 	log.Printf("Processed %d requests(samples: %d) in %s", total, totalSeries, time.Since(now))
 	return nil
@@ -223,6 +237,7 @@ func main() {
 	rootCmd.Flags().StringP("interval", "", "30s", "The interval of the data")
 	rootCmd.Flags().IntP("max-samples", "s", 20000, "The max number of metrics to load")
 	rootCmd.Flags().StringP("tick-interval", "t", "30s", "The interval of the requests")
+	rootCmd.Flags().IntP("workers", "w", 1, "The number of workers to send requests")
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatalf("Error: %v", err)
 	}
