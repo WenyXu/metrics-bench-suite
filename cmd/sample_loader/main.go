@@ -132,11 +132,6 @@ func (s *SampleLoader) run(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func (s *SampleLoader) sendRequest(request prompb.WriteRequest) error {
-	r := http.NewRequester(s.RemoteWriteURL)
-	return r.Send(request)
-}
-
 func worker(id int, url string, request <-chan prompb.WriteRequest, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for request := range request {
