@@ -23,6 +23,7 @@ type SampleLoader struct {
 	MaxSamples     int
 	TickInterval   time.Duration
 	Workers        int
+	Infinite       bool
 }
 
 type metric struct {
@@ -66,6 +67,10 @@ func (s *SampleLoader) run(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	s.Workers, err = cmd.Flags().GetInt("workers")
+	if err != nil {
+		return err
+	}
+	s.Infinite, err = cmd.Flags().GetBool("infinite")
 	if err != nil {
 		return err
 	}
@@ -117,17 +122,28 @@ func (s *SampleLoader) run(cmd *cobra.Command, args []string) error {
 	ticker := time.NewTicker(s.TickInterval)
 	defer ticker.Stop()
 
+	requestChan := make(chan prompb.WriteRequest, s.Workers)
+
+	wg := sync.WaitGroup{}
+	for i := 0; i < s.Workers; i++ {
+		wg.Add(1)
+		go worker(i, s.RemoteWriteURL, requestChan, &wg)
+	}
+
 	for range ticker.C {
-		requests := convertToRemoteWriteRequests(metrics, current, s.MaxSamples)
-		err := s.sendRequests(requests, totalSeries)
-		if err != nil {
-			return err
-		}
-		current = current.Add(s.Interval)
-		if current.After(s.EndDate) {
-			break
+		log.Printf("Generating samples for %s", current)
+		convertToRemoteWriteRequests(metrics, current, s.MaxSamples, requestChan)
+		if !s.Infinite {
+			current = current.Add(s.Interval)
+			if current.After(s.EndDate) {
+				log.Printf("End date reached, stopping")
+				break
+			}
 		}
 	}
+
+	close(requestChan)
+	wg.Wait()
 
 	return nil
 }
@@ -143,26 +159,6 @@ func worker(id int, url string, request <-chan prompb.WriteRequest, wg *sync.Wai
 		}
 		log.Printf("worker %d sent request in %s", id, time.Since(now))
 	}
-}
-
-func (s *SampleLoader) sendRequests(requests []prompb.WriteRequest, totalSeries int) error {
-	wg := sync.WaitGroup{}
-	now := time.Now()
-	total := len(requests)
-
-	requestChan := make(chan prompb.WriteRequest, s.Workers)
-	for i := 0; i < s.Workers; i++ {
-		wg.Add(1)
-		go worker(i, s.RemoteWriteURL, requestChan, &wg)
-	}
-
-	for _, request := range requests {
-		requestChan <- request
-	}
-	close(requestChan)
-	wg.Wait()
-	log.Printf("Processed %d requests(samples: %d) in %s", total, totalSeries, time.Since(now))
-	return nil
 }
 
 func convertMetricToTimeSeries(metric metric, current time.Time) []prompb.TimeSeries {
@@ -194,27 +190,25 @@ func convertMetricToTimeSeries(metric metric, current time.Time) []prompb.TimeSe
 	return tsSet
 }
 
-func convertToRemoteWriteRequests(metrics []metric, current time.Time, maxSamples int) []prompb.WriteRequest {
-	requests := make([]prompb.WriteRequest, 0)
+func convertToRemoteWriteRequests(metrics []metric, current time.Time, maxSamples int, requestChan chan<- prompb.WriteRequest) {
+
 	tsSet := make([]prompb.TimeSeries, 0)
 	for _, metric := range metrics {
 		tsSet = append(tsSet, convertMetricToTimeSeries(metric, current)...)
 	}
 	for len(tsSet) > 0 {
 		if len(tsSet) > maxSamples {
-			requests = append(requests, prompb.WriteRequest{
+			requestChan <- prompb.WriteRequest{
 				Timeseries: tsSet[:maxSamples],
-			})
+			}
 			tsSet = tsSet[maxSamples:]
 		} else {
-			requests = append(requests, prompb.WriteRequest{
+			requestChan <- prompb.WriteRequest{
 				Timeseries: tsSet,
-			})
+			}
 			tsSet = make([]prompb.TimeSeries, 0)
 		}
 	}
-
-	return requests
 }
 
 func main() {
@@ -238,6 +232,7 @@ func main() {
 	rootCmd.Flags().IntP("max-samples", "s", 20000, "The max number of metrics to load")
 	rootCmd.Flags().StringP("tick-interval", "t", "30s", "The interval of the requests")
 	rootCmd.Flags().IntP("workers", "w", 1, "The number of workers to send requests")
+	rootCmd.Flags().BoolP("infinite", "i", false, "Run indefinitely")
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatalf("Error: %v", err)
 	}
