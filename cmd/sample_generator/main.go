@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 
@@ -143,11 +142,11 @@ func (s *SampleGenerator) run(cmd *cobra.Command, args []string) error {
 		for _, metric := range metrics {
 			tss := convertMetricToTimeSeries(metric, s.StartDate, s.EndDate, s.Interval)
 			for _, ts := range tss {
-				json, err := json.Marshal(ts)
+				bytes, err := ts.Marshal()
 				if err != nil {
 					return err
 				}
-				err = parquetWriter.Write(row{Value: string(json)})
+				err = parquetWriter.Write(row{Value: string(bytes)})
 				if err != nil {
 					return err
 				}
@@ -179,7 +178,7 @@ func newParquetWriter(parquetFile source.ParquetFile) (*writer.ParquetWriter, er
 }
 
 type row struct {
-	Value string `parquet:"name=value, type=BYTE_ARRAY, convertedtype=UTF8"`
+	Value string `parquet:"name=value, type=BYTE_ARRAY"`
 }
 
 func convertMetricToTimeSeries(metric metric, start time.Time, end time.Time, interval time.Duration) []prompb.TimeSeries {
