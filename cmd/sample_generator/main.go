@@ -128,21 +128,21 @@ func (s *SampleGenerator) run(cmd *cobra.Command, args []string) error {
 		wr := convertToRemoteWriteRequest(metrics, s.StartDate, s.EndDate, s.Interval)
 		err = http.NewRequester(s.RemoteWriteURL).Send(wr)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to send metrics to remote write: %w", err)
 		}
 	} else {
 		log.Printf("Saving metrics to file...")
 
 		if err := os.MkdirAll(s.OutputDir, 0755); err != nil {
-			return err
+			return fmt.Errorf("failed to create output directory: %w", err)
 		}
 		parquetFile, err := local.NewLocalFileWriter(filepath.Join(s.OutputDir, s.fileName()))
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to create parquet file: %w", err)
 		}
 		parquetWriter, err := newParquetWriter(parquetFile)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to create parquet writer: %w", err)
 		}
 
 		for _, metric := range metrics {
@@ -150,22 +150,21 @@ func (s *SampleGenerator) run(cmd *cobra.Command, args []string) error {
 			for _, ts := range tss {
 				bytes, err := ts.Marshal()
 				if err != nil {
-					return err
+					return fmt.Errorf("failed to marshal time series: %w", err)
 				}
 				err = parquetWriter.Write(row{Value: string(bytes)})
 				if err != nil {
-					return err
+					return fmt.Errorf("failed to write time series: %w", err)
 				}
 			}
 		}
 
 		if err := parquetWriter.WriteStop(); err != nil {
-			return err
+			return fmt.Errorf("failed to stop parquet writer: %w", err)
 		}
 		if err := parquetFile.Close(); err != nil {
-			return err
+			return fmt.Errorf("failed to close parquet file: %w", err)
 		}
-
 	}
 
 	return nil
