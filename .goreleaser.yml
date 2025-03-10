@@ -79,7 +79,7 @@ archives:
     files:
       - LICENSE
       - README.md
-      - generator_samples.sh
+      - generate_samples.sh
       - generate_create_tables_sql.sh
 
 checksum:
