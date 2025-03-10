@@ -14,6 +14,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/xitongsys/parquet-go-source/local"
 	"github.com/xitongsys/parquet-go/parquet"
+	"github.com/xitongsys/parquet-go/source"
 	"github.com/xitongsys/parquet-go/writer"
 )
 
@@ -121,63 +122,64 @@ func (s *SampleGenerator) run(cmd *cobra.Command, args []string) error {
 
 	log.Printf("total time series: %d, for %d metrics", totalCount, len(metrics))
 
-	wr := convertToRemoteWriteRequest(metrics, s.StartDate, s.EndDate, s.Interval)
-
 	if s.RemoteWriteURL != "" {
 		log.Printf("Sending metrics to remote write...")
+		wr := convertToRemoteWriteRequest(metrics, s.StartDate, s.EndDate, s.Interval)
 		err = http.NewRequester(s.RemoteWriteURL).Send(wr)
 		if err != nil {
 			return err
 		}
 	} else {
 		log.Printf("Saving metrics to file...")
-		err = writeToParquet(wr.Timeseries, s.fileName())
+		parquetFile, err := local.NewLocalFileWriter(s.fileName())
 		if err != nil {
 			return err
 		}
+		parquetWriter, err := newParquetWriter(parquetFile)
+		if err != nil {
+			return err
+		}
+
+		for _, metric := range metrics {
+			tss := convertMetricToTimeSeries(metric, s.StartDate, s.EndDate, s.Interval)
+			for _, ts := range tss {
+				json, err := json.Marshal(ts)
+				if err != nil {
+					return err
+				}
+				err = parquetWriter.Write(row{Value: string(json)})
+				if err != nil {
+					return err
+				}
+			}
+		}
+
+		if err := parquetWriter.WriteStop(); err != nil {
+			return err
+		}
+		if err := parquetFile.Close(); err != nil {
+			return err
+		}
+
 	}
 
 	return nil
 }
 
-type row struct {
-	Value string `parquet:"name=value, type=BYTE_ARRAY, convertedtype=UTF8"`
-}
-
-func writeToParquet(timeseries []prompb.TimeSeries, output string) error {
-	parquetFile, err := local.NewLocalFileWriter(output)
-	if err != nil {
-		return err
-	}
-	defer parquetFile.Close()
-
+func newParquetWriter(parquetFile source.ParquetFile) (*writer.ParquetWriter, error) {
 	parquetWriter, err := writer.NewParquetWriter(parquetFile, new(row), 1)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	parquetWriter.RowGroupSize = 102400
 	parquetWriter.PageSize = 1024 * 1024
 	parquetWriter.CompressionType = parquet.CompressionCodec_ZSTD
-	for _, ts := range timeseries {
-		json, err := json.Marshal(ts)
-		if err != nil {
-			return err
-		}
-		err = parquetWriter.Write(row{Value: string(json)})
-		if err != nil {
-			return err
-		}
-	}
+	return parquetWriter, nil
+}
 
-	if err := parquetWriter.WriteStop(); err != nil {
-		return err
-	}
-	if err := parquetFile.Close(); err != nil {
-		return err
-	}
-
-	return nil
+type row struct {
+	Value string `parquet:"name=value, type=BYTE_ARRAY, convertedtype=UTF8"`
 }
 
 func convertMetricToTimeSeries(metric metric, start time.Time, end time.Time, interval time.Duration) []prompb.TimeSeries {
