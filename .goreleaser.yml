@@ -28,18 +28,54 @@ builds:
     goarch:
       - amd64
       - arm64
-
+  - id: sample_generator
+    main: ./cmd/sample_generator
+    binary: sample_generator
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+  - id: table_creator
+    main: ./cmd/table_creator
+    binary: table_creator
+    goos:
+      - darwin
+      - linux
+  - id: sample_loader
+    main: ./cmd/sample_loader
+    binary: sample_loader
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+  - id: config_modifier
+    main: ./cmd/config_modifier
+    binary: config_modifier
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
 archives:
-  - id: archive
-    builds:
       - loader
       - remote_write_request_viewer
       - timeseries_analyzer
+      - sample_generator
+      - table_creator
+      - sample_loader
+      - config_modifier
     format: tar.gz
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
     files:
       - LICENSE
       - README.md
+      - generator_samples.sh
+      - generate_create_tables_sql.sh
 
 checksum:
   name_template: "checksums.txt"
