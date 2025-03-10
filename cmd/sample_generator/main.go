@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
+	"path/filepath"
 
 	"time"
 
@@ -24,7 +26,7 @@ type SampleGenerator struct {
 	StartDate      time.Time
 	EndDate        time.Time
 	Seed           int
-	Output         string
+	OutputDir      string
 	RemoteWriteURL string
 	Database       string
 	Table          string
@@ -45,6 +47,10 @@ func (s *SampleGenerator) run(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+	s.OutputDir, err = cmd.Flags().GetString("output-dir")
+	if err != nil {
+		return err
+	}
 	s.ConfigPath, err = cmd.Flags().GetString("config")
 	if err != nil {
 		return err
@@ -58,10 +64,6 @@ func (s *SampleGenerator) run(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	s.Seed, err = cmd.Flags().GetInt("seed")
-	if err != nil {
-		return err
-	}
-	s.Output, err = cmd.Flags().GetString("output")
 	if err != nil {
 		return err
 	}
@@ -82,7 +84,7 @@ func (s *SampleGenerator) run(cmd *cobra.Command, args []string) error {
 	log.Printf("Interval: %s", s.Interval)
 	log.Printf("Seed: %d", s.Seed)
 	log.Printf("Config path: %s", s.ConfigPath)
-	log.Printf("Output: %s", s.Output)
+	log.Printf("Output dir: %s", s.OutputDir)
 
 	fileConfigs, err := samples.WalkAndParseConfig(s.ConfigPath)
 	if err != nil {
@@ -130,7 +132,11 @@ func (s *SampleGenerator) run(cmd *cobra.Command, args []string) error {
 		}
 	} else {
 		log.Printf("Saving metrics to file...")
-		parquetFile, err := local.NewLocalFileWriter(s.fileName())
+
+		if err := os.MkdirAll(s.OutputDir, 0755); err != nil {
+			return err
+		}
+		parquetFile, err := local.NewLocalFileWriter(filepath.Join(s.OutputDir, s.fileName()))
 		if err != nil {
 			return err
 		}
@@ -253,8 +259,8 @@ func main() {
 	rootCmd.Flags().StringP("start-date", "", "2025-01-01T00:00:00Z", "The start date of the data")
 	rootCmd.Flags().StringP("end-date", "", "2025-01-01T00:01:00Z", "The end date of the data")
 	rootCmd.Flags().IntP("seed", "s", 123456, "The seed for the random number generator")
-	rootCmd.Flags().StringP("output", "o", "output.json", "The output file")
 	rootCmd.Flags().StringP("remote-write-url", "u", "", "The remote write url")
+	rootCmd.Flags().StringP("output-dir", "o", "", "The output directory")
 
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatalf("Error: %v", err)
