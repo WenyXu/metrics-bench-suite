@@ -20,64 +20,12 @@ tags:
     preset:
     - value: null
       weight: 1
-    - value: kafka
-      weight: 1
-    - value: server
-      weight: 1
-    - value: ebs-plugin
-      weight: 1
-    - value: vector
-      weight: 1
-    - value: internal-greptimedb-standalone
-      weight: 1
-    - value: node-exporter
-      weight: 1
-    - value: aws-eks-nodeagent
-      weight: 1
-    - value: aws-node
-      weight: 1
-    - value: controller
-      weight: 1
-    - value: redis
-      weight: 1
-    - value: dashboard
-      weight: 1
-    - value: csi-resizer
-      weight: 1
-    - value: kube-proxy
-      weight: 1
-    - value: csi-provisioner
-      weight: 1
-    - value: loki
-      weight: 1
-    - value: etcd
-      weight: 1
-    - value: victoria-metrics-cluster-vmstorage
-      weight: 1
-    - value: liveness-probe
-      weight: 1
-    - value: external-dns
-      weight: 1
     type: weighted_preset
   name: container
   type: String
 - dist:
     preset:
     - value: /dev/nvme2n1
-      weight: 1
-    - value: /dev/nvme0n1
-      weight: 1
-    - value: /dev/nvme1n1
-      weight: 1
-    - value: /dev/nvme6n1
-      weight: 1
-    - value: /dev/nvme4n1
-      weight: 1
-    - value: /dev/nvme5n1
-      weight: 1
-    - value: /dev/nvme3n1
-      weight: 1
-    - value: /dev/nvme7n1
       weight: 1
     type: weighted_preset
   name: device

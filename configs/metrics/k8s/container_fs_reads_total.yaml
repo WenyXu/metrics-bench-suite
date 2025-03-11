@@ -18,45 +18,7 @@ tags:
   type: String
 - dist:
     preset:
-    - value: null
-      weight: 1
-    - value: node-driver-registrar
-      weight: 1
-    - value: ebs-plugin
-      weight: 1
-    - value: etcd
-      weight: 1
-    - value: csi-attacher
-      weight: 1
-    - value: csi-provisioner
-      weight: 1
-    - value: datanode
-      weight: 1
-    - value: vector
-      weight: 1
-    - value: controller
-      weight: 1
-    - value: gcp
-      weight: 1
-    - value: config-reloader
-      weight: 1
-    - value: efs-plugin
-      weight: 1
-    - value: tudigong
-      weight: 1
-    - value: aws-eks-nodeagent
-      weight: 1
-    - value: bytebase
-      weight: 1
-    - value: repo-server
-      weight: 1
-    - value: loki
-      weight: 1
-    - value: prometheus
-      weight: 1
-    - value: runner
-      weight: 1
-    - value: liveness-probe
+    - value: container
       weight: 1
     type: weighted_preset
   name: container
@@ -64,20 +26,6 @@ tags:
 - dist:
     preset:
     - value: /dev/nvme3n1
-      weight: 1
-    - value: /dev/nvme6n1
-      weight: 1
-    - value: /dev/nvme0n1
-      weight: 1
-    - value: /dev/nvme1n1
-      weight: 1
-    - value: /dev/nvme2n1
-      weight: 1
-    - value: /dev/nvme4n1
-      weight: 1
-    - value: /dev/nvme5n1
-      weight: 1
-    - value: /dev/nvme7n1
       weight: 1
     type: weighted_preset
   name: device
@@ -101,88 +49,12 @@ tags:
     preset:
     - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-poda06c9ae9_4444_4d61_853f_75c6f75e902f.slice
       weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod1e77dda5_1cd4_4a6b_a78b_14d38ecea5bd.slice
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod418b0360_155e_4064_9bff_a98836a163b1.slice
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod8b12da79_83a6_422f_9446_965d25af590a.slice/cri-containerd-f9e409a316e431b59744a713b50cffd56f7aba5897eb466465b51cbcf466c034.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podd5571f30_c2bf_4bda_8632_05d64baa22f9.slice/cri-containerd-b871741ed5ea0e1f46cb4284b4ae4e7ed075ef7c55bab71b61ec50303258b7dd.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pode7b453fc_b57d_4923_9313_fa52109e1d1f.slice
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podb7c39198_eff1_4a51_a7fb_d4550f3e0702.slice
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod97ea8cd2_c719_4587_8f69_52dd939ec0d8.slice/cri-containerd-ab44f6464bd80dddabf7e97449698f1355566d49bf745356db5f3436df6655d9.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod8294982e_5ea0_48a7_b50d_e227fbe57f1b.slice/cri-containerd-dbacfe1ddb8cfa7b1678d9aa6278dd848b8c7966dcce7d574d424291025fead4.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod144eb1a8_0735_4d5e_bffc_75b4c92086ca.slice/cri-containerd-b9afbc1ca38342723e7948d48f7033a976dcf5c4bb9bd2bb80d422fb4e74d5fe.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod8294982e_5ea0_48a7_b50d_e227fbe57f1b.slice/cri-containerd-af0bab1b78537559418d2409fae9cfecdedcd7e806d66d3fca1ba4a083540def.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podfaa375ea_9345_4b17_99f0_a3a2620359ea.slice/cri-containerd-882055bc2e4b70c6bcbb1d3bfe3cef17832d7e054d759d21932c07e0b8ec47cd.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podd947eed5_d0a1_48e4_b315_257ba5c5965d.slice/cri-containerd-a8bc2e722eedc9f10b40e39dc5f656c2721e8bc7eb69fc6cd15babcea2355a15.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod9438494a_a60d_455b_82d1_7efee586ca4f.slice/cri-containerd-85e31c8e90ea2ec5f4ce60a050de6f48fe7ec587197d1b3caf543ba710e4d028.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod222b4d43_756f_4906_af9d_6a6259346925.slice/cri-containerd-d3af0602ea96307e5cc616b6b921f284eb9d420370f54bc3db4d20a91d528b82.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podfaa375ea_9345_4b17_99f0_a3a2620359ea.slice/cri-containerd-dbfabeda70701c170e5230f2c6b3c0356cb15a05d5446d12e63bc91b1985c22f.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod9bc9138e_ce8a_4dc6_a7d5_2d003a8278d8.slice/cri-containerd-68b47bd464e78eed2c12155ac76f0163ddfa7f7195040c34542444cb3d476031.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod9438494a_a60d_455b_82d1_7efee586ca4f.slice
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pode6c90cb5_0d94_45ac_8906_96ea20b7e288.slice
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podb2f9100d_ea63_4555_9955_b24df842b7b1.slice/cri-containerd-c4300e32ec6620ddde0adfb70cac28299de969fc921f1d9fc74705e3257aed29.scope
-      weight: 1
     type: weighted_preset
   name: id
   type: String
 - dist:
     preset:
-    - value: null
-      weight: 1
-    - value: public.ecr.aws/eks-distro/kubernetes-csi/node-driver-registrar:v2.11.0-eks-1-30-10
-      weight: 1
-    - value: public.ecr.aws/ebs-csi-driver/aws-ebs-csi-driver:v1.34.0
-      weight: 1
-    - value: docker.io/bitnami/etcd:3.5.9-debian-11-r4
-      weight: 1
-    - value: public.ecr.aws/eks-distro/kubernetes-csi/external-attacher:v4.6.1-eks-1-30-10
-      weight: 1
-    - value: public.ecr.aws/eks-distro/kubernetes-csi/external-provisioner:v5.0.1-eks-1-30-10
-      weight: 1
-    - value: 465927837118.dkr.ecr.us-east-1.amazonaws.com/greptimeteam/greptimedb-cloud:d78af306
-      weight: 1
-    - value: docker.io/timberio/vector:0.42.0-distroless-libc
-      weight: 1
-    - value: registry.k8s.io/ingress-nginx/controller@sha256:5b161f051d017e55d358435f295f5e9a297e66158f136321d9b04520ec6c48a3
-      weight: 1
-    - value: 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.5
-      weight: 1
-    - value: 465927837118.dkr.ecr.us-east-1.amazonaws.com/greptimeteam/greptime-cloud-platform:d64b16d-jvm-qa-global-20250121090729129
-      weight: 1
-    - value: quay.io/prometheus-operator/prometheus-config-reloader:v0.69.1
-      weight: 1
-    - value: docker.io/amazon/aws-efs-csi-driver:v2.0.0
-      weight: 1
-    - value: 465927837118.dkr.ecr.us-east-1.amazonaws.com/greptimeteam/tudigong:f621977-20250121095659470
-      weight: 1
-    - value: 602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.1.5-eksbuild.1
-      weight: 1
-    - value: docker.io/bytebase/bytebase:3.2.0
-      weight: 1
-    - value: quay.io/argoproj/argocd:v2.10.1
-      weight: 1
-    - value: docker.io/grafana/loki:2.9.5
-      weight: 1
-    - value: quay.io/prometheus/prometheus:v2.47.2
-      weight: 1
-    - value: us-central1-docker.pkg.dev/genuine-flight-317411/devel/robusta-runner:0.10.23
+    - value: image0
       weight: 1
     type: weighted_preset
   name: image
@@ -214,45 +86,7 @@ tags:
   type: String
 - dist:
     preset:
-    - value: null
-      weight: 1
-    - value: f9e409a316e431b59744a713b50cffd56f7aba5897eb466465b51cbcf466c034
-      weight: 1
-    - value: b871741ed5ea0e1f46cb4284b4ae4e7ed075ef7c55bab71b61ec50303258b7dd
-      weight: 1
-    - value: ab44f6464bd80dddabf7e97449698f1355566d49bf745356db5f3436df6655d9
-      weight: 1
-    - value: dbacfe1ddb8cfa7b1678d9aa6278dd848b8c7966dcce7d574d424291025fead4
-      weight: 1
-    - value: b9afbc1ca38342723e7948d48f7033a976dcf5c4bb9bd2bb80d422fb4e74d5fe
-      weight: 1
-    - value: af0bab1b78537559418d2409fae9cfecdedcd7e806d66d3fca1ba4a083540def
-      weight: 1
-    - value: 882055bc2e4b70c6bcbb1d3bfe3cef17832d7e054d759d21932c07e0b8ec47cd
-      weight: 1
-    - value: a8bc2e722eedc9f10b40e39dc5f656c2721e8bc7eb69fc6cd15babcea2355a15
-      weight: 1
-    - value: 85e31c8e90ea2ec5f4ce60a050de6f48fe7ec587197d1b3caf543ba710e4d028
-      weight: 1
-    - value: d3af0602ea96307e5cc616b6b921f284eb9d420370f54bc3db4d20a91d528b82
-      weight: 1
-    - value: dbfabeda70701c170e5230f2c6b3c0356cb15a05d5446d12e63bc91b1985c22f
-      weight: 1
-    - value: 68b47bd464e78eed2c12155ac76f0163ddfa7f7195040c34542444cb3d476031
-      weight: 1
-    - value: c4300e32ec6620ddde0adfb70cac28299de969fc921f1d9fc74705e3257aed29
-      weight: 1
-    - value: 440cdec4f8a7d5763d4180807394e19492c5e557c8911da41e9e099eca9014cc
-      weight: 1
-    - value: 94192da4521da65d3473f8d7ea99af9ebd3cbd16dd2a17cd233e39464bf31b0d
-      weight: 1
-    - value: 5038aa43bdfa90ac2a29a02a43ab2e6cea2467731b0190a320250c9b09a06e11
-      weight: 1
-    - value: 77736b8c77759767653329224c371f1e0528c92c07869dfe353d3ae7d5d1c2b7
-      weight: 1
-    - value: 653bbefa206f63a42d11138902cebf27818a0e59dfa5373f5ba1a52317e38ffb
-      weight: 1
-    - value: a5f84403a9a81bab1c1e2ccaf9d46924abe1820282ba1a02c5a813330157ccf0
+    - value: name0
       weight: 1
     type: weighted_preset
   name: name
@@ -261,44 +95,6 @@ tags:
     preset:
     - value: loki
       weight: 1
-    - value: etcd
-      weight: 1
-    - value: kube-system
-      weight: 1
-    - value: greptimedb
-      weight: 1
-    - value: vector
-      weight: 1
-    - value: dedicated-etcd
-      weight: 1
-    - value: internal-ingress-nginx
-      weight: 1
-    - value: gcp
-      weight: 1
-    - value: monitoring
-      weight: 1
-    - value: kubernetes-event-exporter
-      weight: 1
-    - value: tudigong
-      weight: 1
-    - value: bytebase
-      weight: 1
-    - value: argo-cd
-      weight: 1
-    - value: kubernetes-replicator
-      weight: 1
-    - value: victoria-metrics-cluster
-      weight: 1
-    - value: robusta
-      weight: 1
-    - value: kube-fledged
-      weight: 1
-    - value: jarvis
-      weight: 1
-    - value: cert-manager
-      weight: 1
-    - value: internal-greptimedb-standalone
-      weight: 1
     type: weighted_preset
   name: namespace
   type: String
@@ -306,58 +102,12 @@ tags:
     preset:
     - value: ip-10-0-162-53.ec2.internal
       weight: 1
-    - value: ip-10-0-166-131.ec2.internal
-      weight: 1
-    - value: ip-10-0-169-179.ec2.internal
-      weight: 1
-    - value: ip-10-0-175-164.ec2.internal
-      weight: 1
-    - value: ip-10-0-162-77.ec2.internal
-      weight: 1
     type: weighted_preset
   name: node
   type: String
 - dist:
     preset:
     - value: loki-write-1
-      weight: 1
-    - value: etcd-1
-      weight: 1
-    - value: aws-node-mpvsz
-      weight: 1
-    - value: ebs-csi-node-h64gd
-      weight: 1
-    - value: ebs-csi-node-qkksr
-      weight: 1
-    - value: loki-backend-1
-      weight: 1
-    - value: ebs-csi-node-2ffjx
-      weight: 1
-    - value: etcd-2
-      weight: 1
-    - value: ebs-csi-controller-7569cdd674-fvqnc
-      weight: 1
-    - value: ebs-csi-node-297wb
-      weight: 1
-    - value: greptimedb-datanode-0
-      weight: 1
-    - value: vector-dbg5j
-      weight: 1
-    - value: etcd-0
-      weight: 1
-    - value: internal-ingress-nginx-controller-76d547b95b-vr4rj
-      weight: 1
-    - value: gcp-6fbc9cf564-k5968
-      weight: 1
-    - value: greptimedb-datanode-1
-      weight: 1
-    - value: prometheus-prometheus-kube-prometheus-prometheus-0
-      weight: 1
-    - value: efs-csi-controller-bc466c4b6-f6m2k
-      weight: 1
-    - value: kubernetes-event-exporter-789ddbdd6f-r7lkk
-      weight: 1
-    - value: efs-csi-node-7ln4t
       weight: 1
     type: weighted_preset
   name: pod

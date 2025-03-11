@@ -48,7 +48,7 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 6
         replica_prefix: node-
     - name: operation_type
       type: String

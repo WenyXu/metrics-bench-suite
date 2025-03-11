@@ -76,16 +76,12 @@ tags:
     preset:
     - value: /metrics
       weight: 1
-    - value: null
-      weight: 1
     type: weighted_preset
   name: metrics_path
   type: String
 - dist:
     preset:
     - value: kube-system
-      weight: 1
-    - value: default
       weight: 1
     type: weighted_preset
   name: namespace

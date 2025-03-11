@@ -35,14 +35,6 @@ tags:
     preset:
     - value: 10.0.169.179:10250
       weight: 1
-    - value: 10.0.162.77:10250
-      weight: 1
-    - value: 10.0.166.131:10250
-      weight: 1
-    - value: 10.0.175.164:10250
-      weight: 1
-    - value: 10.0.162.53:10250
-      weight: 1
     type: weighted_preset
   name: instance
   type: String
@@ -53,31 +45,19 @@ tags:
   type: String
 - dist:
     preset:
-    - value: '25'
-      weight: 1
     - value: '5'
       weight: 1
     - value: '1'
       weight: 1
-    - value: '2.5'
-      weight: 1
     - value: '10'
       weight: 1
     - value: '0.1'
-      weight: 1
-    - value: '300'
-      weight: 1
-    - value: '120'
       weight: 1
     - value: '15'
       weight: 1
     - value: '50'
       weight: 1
     - value: +Inf
-      weight: 1
-    - value: '600'
-      weight: 1
-    - value: '0.5'
       weight: 1
     - value: '0.25'
       weight: 1
@@ -103,14 +83,6 @@ tags:
     preset:
     - value: ip-10-0-169-179.ec2.internal
       weight: 1
-    - value: ip-10-0-162-77.ec2.internal
-      weight: 1
-    - value: ip-10-0-166-131.ec2.internal
-      weight: 1
-    - value: ip-10-0-175-164.ec2.internal
-      weight: 1
-    - value: ip-10-0-162-53.ec2.internal
-      weight: 1
     type: weighted_preset
   name: node
   type: String
@@ -121,12 +93,6 @@ tags:
     - value: volume_unmount
       weight: 1
     - value: verify_controller_attached_volume
-      weight: 1
-    - value: volume_mount
-      weight: 1
-    - value: unmount_device
-      weight: 1
-    - value: volume_fs_resize
       weight: 1
     type: weighted_preset
   name: operation_name
@@ -158,18 +124,6 @@ tags:
 - dist:
     preset:
     - value: kubernetes.io/projected
-      weight: 1
-    - value: kubernetes.io/empty-dir
-      weight: 1
-    - value: kubernetes.io/secret
-      weight: 1
-    - value: kubernetes.io/host-path
-      weight: 1
-    - value: kubernetes.io/configmap
-      weight: 1
-    - value: kubernetes.io/csi:ebs.csi.aws.com
-      weight: 1
-    - value: kubernetes.io/csi:efs.csi.aws.com
       weight: 1
     type: weighted_preset
   name: volume_plugin

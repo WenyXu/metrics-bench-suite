@@ -133,6 +133,46 @@ func (c *ConfigModifier) run(cmd *cobra.Command, args []string) error {
 					Replica:       &c.NumWorkloads,
 					ReplicaPrefix: &workload,
 				}
+			} else if strings.ToLower(fileConfig.Config.Tags[i].Name) == "name" {
+				fileConfig.Config.Tags[i].Dist = samples.Distribution{
+					Type:  "constant_string",
+					Value: "name0",
+				}
+			} else if strings.ToLower(fileConfig.Config.Tags[i].Name) == "id" {
+				fileConfig.Config.Tags[i].Dist = samples.Distribution{
+					Type:  "constant_string",
+					Value: "id0",
+				}
+			} else if strings.ToLower(fileConfig.Config.Tags[i].Name) == "image" {
+				fileConfig.Config.Tags[i].Dist = samples.Distribution{
+					Type:  "constant_string",
+					Value: "image0",
+				}
+			} else if strings.ToLower(fileConfig.Config.Tags[i].Name) == "pod_ip" {
+				fileConfig.Config.Tags[i].Dist = samples.Distribution{
+					Type:  "constant_string",
+					Value: "10.0.0.0",
+				}
+			} else if strings.ToLower(fileConfig.Config.Tags[i].Name) == "node_ip" {
+				fileConfig.Config.Tags[i].Dist = samples.Distribution{
+					Type:  "constant_string",
+					Value: "10.0.0.0",
+				}
+			} else if strings.ToLower(fileConfig.Config.Tags[i].Name) == "uid" {
+				fileConfig.Config.Tags[i].Dist = samples.Distribution{
+					Type:  "constant_string",
+					Value: "f5a3af84-221f-486f-821f-1fbd61b5ede2",
+				}
+			} else if strings.ToLower(fileConfig.Config.Tags[i].Name) == "device" {
+				fileConfig.Config.Tags[i].Dist = samples.Distribution{
+					Type:  "constant_string",
+					Value: "/dev/nvme0n1",
+				}
+			} else if strings.ToLower(fileConfig.Config.Tags[i].Name) == "container" {
+				fileConfig.Config.Tags[i].Dist = samples.Distribution{
+					Type:  "constant_string",
+					Value: "container0",
+				}
 			}
 		}
 		for _, tag := range fileConfig.Config.Tags {

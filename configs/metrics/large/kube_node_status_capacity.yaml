@@ -79,8 +79,6 @@ tags:
       weight: 1
     - value: cpu
       weight: 1
-    - value: ephemeral_storage
-      weight: 1
     - value: memory
       weight: 1
     type: weighted_preset

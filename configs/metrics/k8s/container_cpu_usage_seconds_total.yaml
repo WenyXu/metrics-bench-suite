@@ -20,44 +20,6 @@ tags:
     preset:
     - value: repo-server
       weight: 1
-    - value: null
-      weight: 1
-    - value: liveness-probe
-      weight: 1
-    - value: csi-resizer
-      weight: 1
-    - value: kube-state-metrics
-      weight: 1
-    - value: node-driver-registrar
-      weight: 1
-    - value: csi-attacher
-      weight: 1
-    - value: csi-provisioner
-      weight: 1
-    - value: ebs-plugin
-      weight: 1
-    - value: csi-driver-registrar
-      weight: 1
-    - value: loki
-      weight: 1
-    - value: jarvis-consumer
-      weight: 1
-    - value: volumemodifier
-      weight: 1
-    - value: runner
-      weight: 1
-    - value: config-reloader
-      weight: 1
-    - value: dashboard-playground
-      weight: 1
-    - value: jmx-exporter
-      weight: 1
-    - value: node-exporter
-      weight: 1
-    - value: kube-proxy
-      weight: 1
-    - value: tudigong
-      weight: 1
     type: weighted_preset
   name: container
   type: String
@@ -83,45 +45,7 @@ tags:
   type: String
 - dist:
     preset:
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pode5a4898a_6e45_4472_84f6_cc13814f266d.slice/cri-containerd-8a78e1bbe3a442e53976aaf96edc5af291a146ba71110d34c8075b0b0feb68f7.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod45a656b1_5b4f_4ea3_9471_51b83f6a18bc.slice/cri-containerd-3e682453fb312df2114bd07f20a48b8491a313c9cefbc125f6d5ae61f5597fe2.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-poda06c9ae9_4444_4d61_853f_75c6f75e902f.slice/cri-containerd-cae1fa22d3367bca6132250758efe52e48e0129c77fa3006dee668f060750b52.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod97ea8cd2_c719_4587_8f69_52dd939ec0d8.slice/cri-containerd-4bf9a6fef39b4c7993bf7064eecec1cc68125d2fb3f1f303942043e50d8b6832.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podbaf3287c_bb00_42c5_b78e_25c69c403ba4.slice/cri-containerd-591ea4f34b4f72bb9bb25d29c7866f860e8f5ad99376ac6f506bc25d9f71031e.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod438ceb9c_52bb_4988_bf02_f676fa4f25bc.slice/cri-containerd-66fd4cf40a02cebc07fc5fc6076671816e84db51e062b5dd93bdb5bdf8791a8b.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-besteffort.slice/kubepods-besteffort-podb8d76005_eca1_46f2_b2ca_2d28ce191c40.slice/cri-containerd-25b93979406037a5b8b8d9877cb9c3e8e88055a8a5d984a86de9e3fd5a3b38ff.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pode7b453fc_b57d_4923_9313_fa52109e1d1f.slice/cri-containerd-9f9f3b52a365ddc5a603d54f7ece513b0d2e9df8f015bffa131e023a723d4f41.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod934174a3_39ec_4fb6_8ed6_cc54fbe47bb3.slice
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-poda65f62a4_a3c6_4932_8013_3de7e2a8c4e9.slice
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podbf27637f_3b38_47fb_9479_900854ecdc3d.slice/cri-containerd-ec0e2a34d3de4063c280c5fee5f56e1a81133fbb89d017deb205062cd9665971.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-poda9057afa_0e36_4dbc_b74a_32d465b9b935.slice/cri-containerd-e6b533b52c64dcfea650f7813daec5c0d2977b83d73793bfd0efc53968944c40.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-besteffort.slice/kubepods-besteffort-podc8e3c5e4_52e9_4918_ac7c_05de8d8c4801.slice
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podb178ecfc_7cce_4640_a0c8_000da84ae66d.slice/cri-containerd-4e6342fa40cf26acb5a179ffca1fee92af0bb4b06c350efbd303587289c1e5d0.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod79dabf76_afa9_4b1a_98bb_a50d925472a1.slice/cri-containerd-194c53b1494c0962675a81d83c03ce0cb1d792193b20d978e115b6b792f33522.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-podb7c39198_eff1_4a51_a7fb_d4550f3e0702.slice/cri-containerd-c00e48659faa5701edfd0891a74cc74061beb9894bf05d59e657acba5b3e617c.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod97ea8cd2_c719_4587_8f69_52dd939ec0d8.slice
-      weight: 1
-    - value: /kubepods.slice/kubepods-besteffort.slice/kubepods-besteffort-podc8e3c5e4_52e9_4918_ac7c_05de8d8c4801.slice/cri-containerd-661676f6030844821948ce4353661225621f2010b1c75c549b25ddbfc6fbfd00.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-burstable.slice/kubepods-burstable-pod8294982e_5ea0_48a7_b50d_e227fbe57f1b.slice/cri-containerd-dbacfe1ddb8cfa7b1678d9aa6278dd848b8c7966dcce7d574d424291025fead4.scope
-      weight: 1
-    - value: /kubepods.slice/kubepods-besteffort.slice/kubepods-besteffort-pod37802399_d8e8_458f_b689_d27103404fe6.slice
+    - value: id
       weight: 1
     type: weighted_preset
   name: id
@@ -129,44 +53,6 @@ tags:
 - dist:
     preset:
     - value: quay.io/argoproj/argocd:v2.10.1
-      weight: 1
-    - value: 602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/pause:3.5
-      weight: 1
-    - value: public.ecr.aws/eks-distro/kubernetes-csi/livenessprobe:v2.12.0-eks-1-29-7
-      weight: 1
-    - value: null
-      weight: 1
-    - value: public.ecr.aws/eks-distro/kubernetes-csi/external-resizer:v1.11.1-eks-1-30-10
-      weight: 1
-    - value: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.10.1
-      weight: 1
-    - value: public.ecr.aws/eks-distro/kubernetes-csi/node-driver-registrar:v2.11.0-eks-1-30-10
-      weight: 1
-    - value: public.ecr.aws/eks-distro/kubernetes-csi/external-attacher:v4.6.1-eks-1-30-10
-      weight: 1
-    - value: public.ecr.aws/eks-distro/kubernetes-csi/external-provisioner:v4.0.0-eks-1-29-7
-      weight: 1
-    - value: public.ecr.aws/ebs-csi-driver/aws-ebs-csi-driver:v1.34.0
-      weight: 1
-    - value: public.ecr.aws/eks-distro/kubernetes-csi/node-driver-registrar:v2.10.0-eks-1-29-7
-      weight: 1
-    - value: docker.io/grafana/loki:2.9.5
-      weight: 1
-    - value: 465927837118.dkr.ecr.us-east-1.amazonaws.com/greptimeteam/jarvis:608f9b4c-20250120075551
-      weight: 1
-    - value: public.ecr.aws/ebs-csi-driver/volume-modifier-for-k8s:v0.3.0
-      weight: 1
-    - value: us-central1-docker.pkg.dev/genuine-flight-317411/devel/robusta-runner:0.10.23
-      weight: 1
-    - value: quay.io/prometheus-operator/prometheus-config-reloader:v0.69.1
-      weight: 1
-    - value: 465927837118.dkr.ecr.us-east-1.amazonaws.com/greptimeteam/dashboard-private:60b6c415-playground-test
-      weight: 1
-    - value: docker.io/bitnami/jmx-exporter:1.0.1-debian-12-r9
-      weight: 1
-    - value: quay.io/prometheus/node-exporter:v1.6.1
-      weight: 1
-    - value: 066635153087.dkr.ecr.il-central-1.amazonaws.com/eks/kube-proxy:v1.30.6-minimal-eksbuild.3
       weight: 1
     type: weighted_preset
   name: image
@@ -198,45 +84,7 @@ tags:
   type: String
 - dist:
     preset:
-    - value: 8a78e1bbe3a442e53976aaf96edc5af291a146ba71110d34c8075b0b0feb68f7
-      weight: 1
-    - value: 3e682453fb312df2114bd07f20a48b8491a313c9cefbc125f6d5ae61f5597fe2
-      weight: 1
-    - value: cae1fa22d3367bca6132250758efe52e48e0129c77fa3006dee668f060750b52
-      weight: 1
-    - value: 4bf9a6fef39b4c7993bf7064eecec1cc68125d2fb3f1f303942043e50d8b6832
-      weight: 1
-    - value: 591ea4f34b4f72bb9bb25d29c7866f860e8f5ad99376ac6f506bc25d9f71031e
-      weight: 1
-    - value: 66fd4cf40a02cebc07fc5fc6076671816e84db51e062b5dd93bdb5bdf8791a8b
-      weight: 1
-    - value: 25b93979406037a5b8b8d9877cb9c3e8e88055a8a5d984a86de9e3fd5a3b38ff
-      weight: 1
-    - value: 9f9f3b52a365ddc5a603d54f7ece513b0d2e9df8f015bffa131e023a723d4f41
-      weight: 1
-    - value: null
-      weight: 1
-    - value: ec0e2a34d3de4063c280c5fee5f56e1a81133fbb89d017deb205062cd9665971
-      weight: 1
-    - value: e6b533b52c64dcfea650f7813daec5c0d2977b83d73793bfd0efc53968944c40
-      weight: 1
-    - value: 4e6342fa40cf26acb5a179ffca1fee92af0bb4b06c350efbd303587289c1e5d0
-      weight: 1
-    - value: 194c53b1494c0962675a81d83c03ce0cb1d792193b20d978e115b6b792f33522
-      weight: 1
-    - value: c00e48659faa5701edfd0891a74cc74061beb9894bf05d59e657acba5b3e617c
-      weight: 1
-    - value: 661676f6030844821948ce4353661225621f2010b1c75c549b25ddbfc6fbfd00
-      weight: 1
-    - value: dbacfe1ddb8cfa7b1678d9aa6278dd848b8c7966dcce7d574d424291025fead4
-      weight: 1
-    - value: d08aaacd24bfaf57d3c7060f10288ff9348c0f43bbe653d7c09233a91678fbdd
-      weight: 1
-    - value: 6f241da94d4a7c0f9b4a3e0decbf1d998185ff5c057ccd15a722bfadcf5b889a
-      weight: 1
-    - value: 59e0ac6d05d16781e8528879233691c6a0f56212de951965c350b5192a592236
-      weight: 1
-    - value: 72272811462e28345c5d2de5e2c692921fa5f76e07e36dc7c5ac207b1aa01f6c
+    - value: name
       weight: 1
     type: weighted_preset
   name: name
@@ -245,44 +93,6 @@ tags:
     preset:
     - value: argo-cd
       weight: 1
-    - value: kube-system
-      weight: 1
-    - value: loki
-      weight: 1
-    - value: etcd
-      weight: 1
-    - value: ingress-nginx
-      weight: 1
-    - value: greptimedb
-      weight: 1
-    - value: debug
-      weight: 1
-    - value: cert-manager
-      weight: 1
-    - value: monitoring
-      weight: 1
-    - value: default
-      weight: 1
-    - value: vector
-      weight: 1
-    - value: internal-ingress-nginx
-      weight: 1
-    - value: jarvis
-      weight: 1
-    - value: dedicated-etcd
-      weight: 1
-    - value: gcp
-      weight: 1
-    - value: robusta
-      weight: 1
-    - value: kafka
-      weight: 1
-    - value: greptimedb-operator
-      weight: 1
-    - value: tudigong
-      weight: 1
-    - value: gcrm
-      weight: 1
     type: weighted_preset
   name: namespace
   type: String
@@ -290,58 +100,12 @@ tags:
     preset:
     - value: ip-10-0-169-179.ec2.internal
       weight: 1
-    - value: ip-10-0-162-77.ec2.internal
-      weight: 1
-    - value: ip-10-0-162-53.ec2.internal
-      weight: 1
-    - value: ip-10-0-166-131.ec2.internal
-      weight: 1
-    - value: ip-10-0-175-164.ec2.internal
-      weight: 1
     type: weighted_preset
   name: node
   type: String
 - dist:
     preset:
     - value: argo-cd-argocd-repo-server-848d887764-d9cgv
-      weight: 1
-    - value: ebs-csi-node-c24t2
-      weight: 1
-    - value: loki-write-1
-      weight: 1
-    - value: etcd-2
-      weight: 1
-    - value: aws-node-hbdbn
-      weight: 1
-    - value: ingress-nginx-controller-646d774bc8-frtzs
-      weight: 1
-    - value: efs-csi-node-7ln4t
-      weight: 1
-    - value: loki-backend-1
-      weight: 1
-    - value: greptimedb-meta-6ccc6598cd-7qg59
-      weight: 1
-    - value: greptimedb-datanode-2
-      weight: 1
-    - value: debug-796b745495-bcz88
-      weight: 1
-    - value: cert-manager-webhook-87b57d98b-48p4n
-      weight: 1
-    - value: efs-csi-controller-bc466c4b6-f6m2k
-      weight: 1
-    - value: ebs-csi-controller-7569cdd674-whx4z
-      weight: 1
-    - value: prometheus-kube-state-metrics-8f664f9c8-cdcrg
-      weight: 1
-    - value: ebs-csi-node-2ffjx
-      weight: 1
-    - value: ebs-csi-controller-7569cdd674-fvqnc
-      weight: 1
-    - value: efs-csi-node-pnq5t
-      weight: 1
-    - value: postgresql-client
-      weight: 1
-    - value: aws-node-mpvsz
       weight: 1
     type: weighted_preset
   name: pod

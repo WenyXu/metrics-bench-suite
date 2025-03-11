@@ -75,8 +75,6 @@ tags:
               weight: 1
             - value: cpu
               weight: 1
-            - value: ephemeral_storage
-              weight: 1
             - value: memory
               weight: 1
     - name: service
@@ -90,10 +88,6 @@ tags:
         type: weighted_preset
         preset:
             - value: unit0
-              weight: 1
-            - value: unit1
-              weight: 1
-            - value: unit2
               weight: 1
 fields:
     - name: greptime_value

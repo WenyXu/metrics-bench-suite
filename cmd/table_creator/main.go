@@ -43,7 +43,9 @@ PRIMARY KEY (%s)
     "memtable.type" = "partition_tree",
     "memtable.partition_tree.primary_key_encoding" = "sparse",
 	"index.type" = "skipping", 
-	"index.granularity" = "%d"
+	"index.granularity" = "%d",
+	"compaction.type" = "twcs",
+	"compaction.twcs.time_window" = "2h",
 );
 `
 

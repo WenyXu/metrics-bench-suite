@@ -14,10 +14,6 @@ tags:
         preset:
             - value: endpoint0
               weight: 1
-            - value: endpoint1
-              weight: 1
-            - value: endpoint2
-              weight: 1
     - name: env
       type: String
       dist:
@@ -64,23 +60,13 @@ tags:
       dist:
         type: weighted_preset
         preset:
-            - value: "1e-08"
-              weight: 1
             - value: "9.999999999999999e-05"
               weight: 1
             - value: "10"
               weight: 1
-            - value: "1e-07"
-              weight: 1
             - value: +Inf
               weight: 1
-            - value: "1"
-              weight: 1
             - value: "0.001"
-              weight: 1
-            - value: "9.999999999999999e-06"
-              weight: 1
-            - value: "1e-06"
               weight: 1
             - value: "0.01"
               weight: 1
@@ -96,10 +82,8 @@ tags:
     - name: name
       type: String
       dist:
-        type: weighted_preset
-        preset:
-            - value: name0
-              weight: 1
+        type: constant_string
+        value: name0
     - name: namespace
       type: String
       dist:
@@ -110,7 +94,7 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 6
         replica_prefix: node-
     - name: prometheus
       type: String
@@ -128,10 +112,6 @@ tags:
         type: weighted_preset
         preset:
             - value: service0
-              weight: 1
-            - value: service1
-              weight: 1
-            - value: service2
               weight: 1
 fields:
     - name: greptime_value

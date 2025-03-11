@@ -70,8 +70,6 @@ tags:
         preset:
             - value: /metrics
               weight: 1
-            - value: ""
-              weight: 1
     - name: namespace
       type: String
       dist:
@@ -82,13 +80,13 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 6
         replica_prefix: node-
     - name: pod
       type: String
       dist:
         type: replica_string
-        replica: 2
+        replica: 10
         replica_prefix: pod-
     - name: prometheus
       type: String

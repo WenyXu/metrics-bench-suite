@@ -10,14 +10,8 @@ tags:
     - name: container
       type: String
       dist:
-        type: weighted_preset
-        preset:
-            - value: container0
-              weight: 1
-            - value: container1
-              weight: 1
-            - value: container2
-              weight: 1
+        type: constant_string
+        value: container0
     - name: endpoint
       type: String
       dist:
@@ -54,7 +48,7 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 2
+        replica: 10
         replica_prefix: pod-
     - name: prometheus
       type: String
@@ -85,14 +79,8 @@ tags:
     - name: uid
       type: String
       dist:
-        type: weighted_preset
-        preset:
-            - value: uid0
-              weight: 1
-            - value: uid1
-              weight: 1
-            - value: uid2
-              weight: 1
+        type: constant_string
+        value: f5a3af84-221f-486f-821f-1fbd61b5ede2
 fields:
     - name: greptime_value
       type: Float

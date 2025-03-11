@@ -18,11 +18,7 @@ tags:
   type: String
 - dist:
     preset:
-    - value: https-metrics
-      weight: 1
     - value: https
-      weight: 1
-    - value: null
       weight: 1
     type: weighted_preset
   name: endpoint
@@ -40,20 +36,6 @@ tags:
 - dist:
     preset:
     - value: 10.0.162.53:10250
-      weight: 1
-    - value: 10.0.161.185:443
-      weight: 1
-    - value: 10.0.180.195:443
-      weight: 1
-    - value: 10.0.163.161:8080
-      weight: 1
-    - value: 10.0.169.179:10250
-      weight: 1
-    - value: 10.0.175.164:10250
-      weight: 1
-    - value: 10.0.162.77:10250
-      weight: 1
-    - value: 10.0.166.131:10250
       weight: 1
     type: weighted_preset
   name: instance
@@ -85,23 +67,13 @@ tags:
   type: String
 - dist:
     preset:
-    - value: 1e-08
-      weight: 1
     - value: '9.999999999999999e-05'
       weight: 1
     - value: '10'
       weight: 1
-    - value: 1e-07
-      weight: 1
     - value: +Inf
       weight: 1
-    - value: '1'
-      weight: 1
     - value: '0.001'
-      weight: 1
-    - value: '9.999999999999999e-06'
-      weight: 1
-    - value: 1e-06
       weight: 1
     - value: '0.01'
       weight: 1
@@ -128,26 +100,11 @@ tags:
     preset:
     - value: kube-system
       weight: 1
-    - value: default
-      weight: 1
-    - value: null
-      weight: 1
-    type: weighted_preset
   name: namespace
   type: String
 - dist:
     preset:
     - value: ip-10-0-162-53.ec2.internal
-      weight: 1
-    - value: null
-      weight: 1
-    - value: ip-10-0-169-179.ec2.internal
-      weight: 1
-    - value: ip-10-0-175-164.ec2.internal
-      weight: 1
-    - value: ip-10-0-162-77.ec2.internal
-      weight: 1
-    - value: ip-10-0-166-131.ec2.internal
       weight: 1
     type: weighted_preset
   name: node
@@ -165,10 +122,6 @@ tags:
 - dist:
     preset:
     - value: prometheus-kube-prometheus-kubelet
-      weight: 1
-    - value: kubernetes
-      weight: 1
-    - value: null
       weight: 1
     type: weighted_preset
   name: service

@@ -11,7 +11,7 @@ tags:
       type: String
       dist:
         type: constant_string
-        value: kube-state-metrics
+        value: container0
     - name: created_by_kind
       type: String
       dist:
@@ -21,14 +21,14 @@ tags:
               weight: 1
             - value: created_by_kind1
               weight: 1
+            - value: created_by_kind2
+              weight: 1
     - name: created_by_name
       type: String
       dist:
         type: weighted_preset
         preset:
             - value: created_by_name0
-              weight: 1
-            - value: created_by_name1
               weight: 1
     - name: endpoint
       type: String
@@ -51,8 +51,6 @@ tags:
         type: weighted_preset
         preset:
             - value: host_ip0
-              weight: 1
-            - value: host_ip1
               weight: 1
     - name: host_network
       type: String
@@ -84,23 +82,19 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 6
         replica_prefix: node-
     - name: pod
       type: String
       dist:
         type: replica_string
-        replica: 2
+        replica: 10
         replica_prefix: pod-
     - name: pod_ip
       type: String
       dist:
-        type: weighted_preset
-        preset:
-            - value: pod_ip0
-              weight: 1
-            - value: pod_ip1
-              weight: 1
+        type: constant_string
+        value: 10.0.0.0
     - name: priority_class
       type: String
       dist:
@@ -109,6 +103,8 @@ tags:
             - value: priority_class0
               weight: 1
             - value: priority_class1
+              weight: 1
+            - value: priority_class2
               weight: 1
     - name: prometheus
       type: String
@@ -128,12 +124,8 @@ tags:
     - name: uid
       type: String
       dist:
-        type: weighted_preset
-        preset:
-            - value: uid0
-              weight: 1
-            - value: uid1
-              weight: 1
+        type: constant_string
+        value: f5a3af84-221f-486f-821f-1fbd61b5ede2
 fields:
     - name: greptime_value
       type: Float

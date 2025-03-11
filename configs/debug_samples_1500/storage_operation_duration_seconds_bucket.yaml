@@ -38,31 +38,19 @@ tags:
       dist:
         type: weighted_preset
         preset:
-            - value: "25"
-              weight: 1
             - value: "5"
               weight: 1
             - value: "1"
               weight: 1
-            - value: "2.5"
-              weight: 1
             - value: "10"
               weight: 1
             - value: "0.1"
-              weight: 1
-            - value: "300"
-              weight: 1
-            - value: "120"
               weight: 1
             - value: "15"
               weight: 1
             - value: "50"
               weight: 1
             - value: +Inf
-              weight: 1
-            - value: "600"
-              weight: 1
-            - value: "0.5"
               weight: 1
             - value: "0.25"
               weight: 1
@@ -86,7 +74,7 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 6
         replica_prefix: node-
     - name: operation_name
       type: String
@@ -129,10 +117,6 @@ tags:
         type: weighted_preset
         preset:
             - value: volume_plugin0
-              weight: 1
-            - value: volume_plugin1
-              weight: 1
-            - value: volume_plugin2
               weight: 1
 fields:
     - name: greptime_value

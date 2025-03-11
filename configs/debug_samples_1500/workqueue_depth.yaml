@@ -75,14 +75,8 @@ tags:
     - name: name
       type: String
       dist:
-        type: weighted_preset
-        preset:
-            - value: name0
-              weight: 1
-            - value: name1
-              weight: 1
-            - value: name2
-              weight: 1
+        type: constant_string
+        value: name0
     - name: namespace
       type: String
       dist:
@@ -93,7 +87,7 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 6
         replica_prefix: node-
     - name: prometheus
       type: String

@@ -11,7 +11,7 @@ tags:
       type: String
       dist:
         type: constant_string
-        value: coredns
+        value: container0
     - name: endpoint
       type: String
       dist:
@@ -48,7 +48,7 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 2
+        replica: 10
         replica_prefix: pod-
     - name: prometheus
       type: String
