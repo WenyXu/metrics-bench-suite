@@ -11,7 +11,7 @@ tags:
       type: String
       dist:
         type: constant_string
-        value: node-exporter
+        value: container0
     - name: endpoint
       type: String
       dist:
@@ -36,13 +36,11 @@ tags:
               weight: 1
             - value: hostname1
               weight: 1
-            - value: hostname2
-              weight: 1
     - name: instance
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 2
         replica_prefix: instance-
     - name: instance_type
       type: String
@@ -58,13 +56,13 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 5
+        replica: 20
         replica_prefix: app-
     - name: pod
       type: String
       dist:
         type: replica_string
-        replica: 2
+        replica: 8
         replica_prefix: pod-
     - name: prometheus
       type: String

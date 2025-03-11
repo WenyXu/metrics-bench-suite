@@ -26,7 +26,7 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 2
         replica_prefix: instance-
     - name: job
       type: String
@@ -47,13 +47,13 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 5
+        replica: 20
         replica_prefix: app-
     - name: node
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 8
         replica_prefix: node-
     - name: operation_name
       type: String
@@ -63,8 +63,6 @@ tags:
             - value: operation_name0
               weight: 1
             - value: operation_name1
-              weight: 1
-            - value: operation_name2
               weight: 1
     - name: prometheus
       type: String
@@ -98,8 +96,6 @@ tags:
             - value: volume_plugin0
               weight: 1
             - value: volume_plugin1
-              weight: 1
-            - value: volume_plugin2
               weight: 1
 fields:
     - name: greptime_value

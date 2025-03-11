@@ -11,7 +11,7 @@ tags:
       type: String
       dist:
         type: constant_string
-        value: kube-state-metrics
+        value: container0
     - name: endpoint
       type: String
       dist:
@@ -31,7 +31,7 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 2
         replica_prefix: instance-
     - name: job
       type: String
@@ -42,19 +42,19 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 5
+        replica: 20
         replica_prefix: app-
     - name: node
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 8
         replica_prefix: node-
     - name: pod
       type: String
       dist:
         type: replica_string
-        replica: 2
+        replica: 8
         replica_prefix: pod-
     - name: prometheus
       type: String
@@ -75,8 +75,6 @@ tags:
               weight: 1
             - value: cpu
               weight: 1
-            - value: ephemeral_storage
-              weight: 1
             - value: memory
               weight: 1
     - name: service
@@ -92,8 +90,6 @@ tags:
             - value: unit0
               weight: 1
             - value: unit1
-              weight: 1
-            - value: unit2
               weight: 1
 fields:
     - name: greptime_value

@@ -11,7 +11,7 @@ tags:
       type: String
       dist:
         type: constant_string
-        value: kube-state-metrics
+        value: container0
     - name: endpoint
       type: String
       dist:
@@ -31,7 +31,7 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 2
         replica_prefix: instance-
     - name: job
       type: String
@@ -42,7 +42,7 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 5
+        replica: 20
         replica_prefix: app-
     - name: owner_is_controller
       type: String
@@ -62,8 +62,6 @@ tags:
               weight: 1
             - value: owner_kind1
               weight: 1
-            - value: owner_kind2
-              weight: 1
     - name: owner_name
       type: String
       dist:
@@ -73,13 +71,11 @@ tags:
               weight: 1
             - value: owner_name1
               weight: 1
-            - value: owner_name2
-              weight: 1
     - name: pod
       type: String
       dist:
         type: replica_string
-        replica: 2
+        replica: 8
         replica_prefix: pod-
     - name: prometheus
       type: String
@@ -99,14 +95,8 @@ tags:
     - name: uid
       type: String
       dist:
-        type: weighted_preset
-        preset:
-            - value: uid0
-              weight: 1
-            - value: uid1
-              weight: 1
-            - value: uid2
-              weight: 1
+        type: constant_string
+        value: f5a3af84-221f-486f-821f-1fbd61b5ede2
 fields:
     - name: greptime_value
       type: Float

@@ -16,8 +16,6 @@ tags:
               weight: 1
             - value: endpoint1
               weight: 1
-            - value: endpoint2
-              weight: 1
     - name: env
       type: String
       dist:
@@ -32,7 +30,7 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 2
         replica_prefix: instance-
     - name: job
       type: String
@@ -75,25 +73,19 @@ tags:
     - name: name
       type: String
       dist:
-        type: weighted_preset
-        preset:
-            - value: name0
-              weight: 1
-            - value: name1
-              weight: 1
-            - value: name2
-              weight: 1
+        type: constant_string
+        value: name0
     - name: namespace
       type: String
       dist:
         type: replica_string
-        replica: 5
+        replica: 20
         replica_prefix: app-
     - name: node
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 8
         replica_prefix: node-
     - name: prometheus
       type: String
@@ -113,8 +105,6 @@ tags:
             - value: service0
               weight: 1
             - value: service1
-              weight: 1
-            - value: service2
               weight: 1
 fields:
     - name: greptime_value

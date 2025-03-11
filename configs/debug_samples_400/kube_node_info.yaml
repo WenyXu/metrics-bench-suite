@@ -11,7 +11,7 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 8
         replica_prefix: node-
 fields:
     - name: greptime_value

@@ -16,8 +16,6 @@ tags:
               weight: 1
             - value: container_state1
               weight: 1
-            - value: container_state2
-              weight: 1
     - name: endpoint
       type: String
       dist:
@@ -37,7 +35,7 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 2
         replica_prefix: instance-
     - name: job
       type: String
@@ -53,13 +51,13 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 5
+        replica: 20
         replica_prefix: app-
     - name: node
       type: String
       dist:
         type: replica_string
-        replica: 4
+        replica: 8
         replica_prefix: node-
     - name: prometheus
       type: String
