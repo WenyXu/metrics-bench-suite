@@ -23,13 +23,7 @@ tags:
   type: String
 - dist:
     preset:
-    - value: ReplicaSet
-      weight: 1
     - value: StatefulSet
-      weight: 1
-    - value: Workflow
-      weight: 1
-    - value: DaemonSet
       weight: 1
     type: weighted_preset
   name: created_by_kind
@@ -66,8 +60,6 @@ tags:
 - dist:
     preset:
     - value: 'false'
-      weight: 1
-    - value: 'true'
       weight: 1
     type: weighted_preset
   name: host_network
@@ -112,11 +104,7 @@ tags:
   type: String
 - dist:
     preset:
-    - value: null
-      weight: 1
     - value: system-cluster-critical
-      weight: 1
-    - value: system-node-critical
       weight: 1
     type: weighted_preset
   name: priority_class
