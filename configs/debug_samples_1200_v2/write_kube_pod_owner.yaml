@@ -12,31 +12,49 @@ tags:
       dist:
         type: constant_string
         value: container0
+    - name: created_by_kind
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: StatefulSet
+              weight: 1
+    - name: created_by_name
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: created_by_name
+              weight: 1
     - name: endpoint
       type: String
       dist:
-        type: weighted_preset
-        preset:
-            - value: http
-              weight: 1
-            - value: https
-              weight: 1
+        type: constant_string
+        value: http
     - name: env
       type: String
       dist:
-        type: weighted_preset
-        preset:
-            - value: qa
-              weight: 1
-            - value: prod
-              weight: 1
-            - value: dev
-              weight: 1
+        type: constant_string
+        value: qa
     - name: holiday
       type: String
       dist:
         type: constant_string
         value: "false"
+    - name: host_ip
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: 10.0.162.53
+              weight: 1
+    - name: host_network
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: "false"
+              weight: 1
     - name: instance
       type: String
       dist:
@@ -54,83 +72,30 @@ tags:
         type: replica_string
         replica: 4
         replica_prefix: app-
-    - name: owner_is_controller
+    - name: node
       type: String
       dist:
-        type: weighted_preset
-        preset:
-            - value: "true"
-              weight: 1
-            - value: "false"
-              weight: 1
-            - value: ""
-              weight: 1
-    - name: owner_kind
-      type: String
-      dist:
-        type: weighted_preset
-        preset:
-            - value: StatefulSet
-              weight: 1
-            - value: ReplicaSet
-              weight: 1
-            - value: DaemonSet
-              weight: 1
-            - value: Workflow
-              weight: 1
-            - value: ""
-              weight: 1
-    - name: owner_name
-      type: String
-      dist:
-        type: weighted_preset
-        preset:
-            - value: etcd
-              weight: 1
-            - value: robusta-forwarder-5fc46ff74
-              weight: 1
-            - value: cert-manager-cainjector-57c5ccd8b4
-              weight: 1
-            - value: vector
-              weight: 1
-            - value: kafka-controller
-              weight: 1
-            - value: tudigong-6d886f5b4f
-              weight: 1
-            - value: loki-write
-              weight: 1
-            - value: loki-backend
-              weight: 1
-            - value: prometheus-prometheus-node-exporter
-              weight: 1
-            - value: gcpa-mtls-6c446fbd88
-              weight: 1
-            - value: victoria-metrics-cluster-vminsert-79f4c65d45
-              weight: 1
-            - value: argo-cd-argocd-server-6c544f855d
-              weight: 1
-            - value: efs-csi-node
-              weight: 1
-            - value: bytebase
-              weight: 1
-            - value: prometheus-kube-state-metrics-8f664f9c8
-              weight: 1
-            - value: aws-node
-              weight: 1
-            - value: victoria-metrics-cluster-vmstorage
-              weight: 1
-            - value: reloader-reloader-589bd4796c
-              weight: 1
-            - value: efs-csi-controller-bc466c4b6
-              weight: 1
-            - value: etcd-backup-1741435200
-              weight: 1
+        type: replica_string
+        replica: 8
+        replica_prefix: node-
     - name: pod
       type: String
       dist:
         type: replica_string
         replica: 10
         replica_prefix: pod-
+    - name: pod_ip
+      type: String
+      dist:
+        type: constant_string
+        value: 10.0.0.0
+    - name: priority_class
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: system-cluster-critical
+              weight: 1
     - name: prometheus
       type: String
       dist:
@@ -151,6 +116,18 @@ tags:
       dist:
         type: constant_string
         value: f5a3af84-221f-486f-821f-1fbd61b5ede2
+    - name: extra
+      type: String
+      dist:
+        type: replica_string
+        replica: 5
+        replica_prefix: extra-
+    - name: uuid
+      type: String
+      dist:
+        type: replica_string
+        replica: 5
+        replica_prefix: uid-
 fields:
     - name: greptime_value
       type: Float

@@ -134,14 +134,14 @@ tags:
 - dist:
     preset:
     type: replica_string
-    replica: 20
+    replica: 10
     replica_prefix: extra-
   name: extra
   type: String
 - dist:
     preset:
     type: replica_string
-    replica: 20
+    replica: 5
     replica_prefix: uid-
   name: uuid
   type: String

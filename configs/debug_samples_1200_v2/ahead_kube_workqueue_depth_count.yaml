@@ -12,6 +12,20 @@ tags:
       dist:
         type: constant_string
         value: container0
+    - name: created_by_kind
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: StatefulSet
+              weight: 1
+    - name: created_by_name
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: created_by_name
+              weight: 1
     - name: endpoint
       type: String
       dist:
@@ -27,6 +41,20 @@ tags:
       dist:
         type: constant_string
         value: "false"
+    - name: host_ip
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: 10.0.162.53
+              weight: 1
+    - name: host_network
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: "false"
+              weight: 1
     - name: instance
       type: String
       dist:
@@ -44,12 +72,30 @@ tags:
         type: replica_string
         replica: 4
         replica_prefix: app-
+    - name: node
+      type: String
+      dist:
+        type: replica_string
+        replica: 8
+        replica_prefix: node-
     - name: pod
       type: String
       dist:
         type: replica_string
         replica: 10
         replica_prefix: pod-
+    - name: pod_ip
+      type: String
+      dist:
+        type: constant_string
+        value: 10.0.0.0
+    - name: priority_class
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: system-cluster-critical
+              weight: 1
     - name: prometheus
       type: String
       dist:
@@ -60,27 +106,21 @@ tags:
       dist:
         type: constant_string
         value: prometheus-prometheus-kube-prometheus-prometheus-0
-    - name: reason
-      type: String
-      dist:
-        type: weighted_preset
-        preset:
-            - value: Error
-              weight: 1
-            - value: OOMKilled
-              weight: 1
-            - value: StartError
-              weight: 1
     - name: service
       type: String
       dist:
         type: constant_string
         value: prometheus-kube-state-metrics
+    - name: uid
+      type: String
+      dist:
+        type: constant_string
+        value: f5a3af84-221f-486f-821f-1fbd61b5ede2
     - name: extra
       type: String
       dist:
         type: replica_string
-        replica: 5
+        replica: 10
         replica_prefix: extra-
     - name: uuid
       type: String

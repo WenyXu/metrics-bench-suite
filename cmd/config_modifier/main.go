@@ -55,12 +55,6 @@ var largeSeriesMetrics = []string{
 	"kube_node_status_allocatable",
 }
 
-var noLimit = []string{
-	"write_kube_pod_container_status_last_terminated_reason",
-	"write_kube_pod_info",
-	"write_kube_pod_owner",
-}
-
 // parseExpectTimeseries parses the expect timeseries file and returns a map of metric name to expected timeseries number
 func parseExpectTimeseries(expectTimeseriesPath string) (map[string]int, error) {
 	if expectTimeseriesPath == "" {
@@ -244,7 +238,7 @@ func (c *ConfigModifier) run(cmd *cobra.Command, args []string) error {
 		if slices.Contains(largeSeriesMetrics, fileConfig.Name) {
 			maxNDV = 1
 		}
-		if !slices.Contains(noLimit, fileConfig.Name) {
+		if !strings.HasPrefix(fileConfig.Name, "ahead_") {
 			for i := range len(fileConfig.Config.Tags) {
 				label := strings.ToLower(fileConfig.Config.Tags[i].Name)
 				if _, exists := queryLabels[label]; !exists {

@@ -120,13 +120,13 @@ tags:
       type: String
       dist:
         type: replica_string
-        replica: 20
+        replica: 5
         replica_prefix: extra-
     - name: uuid
       type: String
       dist:
         type: replica_string
-        replica: 20
+        replica: 5
         replica_prefix: uid-
 fields:
     - name: greptime_value

@@ -17,17 +17,23 @@ tags:
   name: cluster
   type: String
 - dist:
+    type: constant_string
+    value: kube-state-metrics
+  name: container
+  type: String
+- dist:
     preset:
-    - value: jarvis-consumer
-      weight: 1
-    - value: internal-greptimedb-standalone
-      weight: 1
-    - value: jarvis-api
-      weight: 1
-    - value: efs-plugin
+    - value: StatefulSet
       weight: 1
     type: weighted_preset
-  name: container
+  name: created_by_kind
+  type: String
+- dist:
+    preset:
+    - value: created_by_name
+      weight: 1
+    type: weighted_preset
+  name: created_by_name
   type: String
 - dist:
     type: constant_string
@@ -45,6 +51,20 @@ tags:
   name: holiday
   type: String
 - dist:
+    preset:
+    - value: 10.0.162.53
+      weight: 1
+    type: weighted_preset
+  name: host_ip
+  type: String
+- dist:
+    preset:
+    - value: 'false'
+      weight: 1
+    type: weighted_preset
+  name: host_network
+  type: String
+- dist:
     type: constant_string
     value: 10.0.169.98:8080
   name: instance
@@ -56,27 +76,38 @@ tags:
   type: String
 - dist:
     preset:
-    - value: jarvis
-      weight: 1
-    - value: internal-greptimedb-standalone
-      weight: 1
-    - value: kube-system
+    - value: ingress-nginx
       weight: 1
     type: weighted_preset
   name: namespace
   type: String
 - dist:
     preset:
-    - value: jarvis-consumer-86999fbb4f-f6gdm
+    - value: ip-10-0-162-53.ec2.internal
       weight: 1
-    - value: internal-greptimedb-standalone-0
-      weight: 1
-    - value: jarvis-api-6d9988949f-vqdvl
-      weight: 1
-    - value: efs-csi-node-7ln4t
+    type: weighted_preset
+  name: node
+  type: String
+- dist:
+    preset:
+    - value: ingress-nginx-controller-646d774bc8-frtzs
       weight: 1
     type: weighted_preset
   name: pod
+  type: String
+- dist:
+    preset:
+    - value: 10.0.171.17
+      weight: 1
+    type: weighted_preset
+  name: pod_ip
+  type: String
+- dist:
+    preset:
+    - value: system-cluster-critical
+      weight: 1
+    type: weighted_preset
+  name: priority_class
   type: String
 - dist:
     type: constant_string
@@ -89,32 +120,28 @@ tags:
   name: prometheus_replica
   type: String
 - dist:
-    preset:
-    - value: Error
-      weight: 1
-    - value: OOMKilled
-      weight: 1
-    - value: StartError
-      weight: 1
-    type: weighted_preset
-  name: reason
-  type: String
-- dist:
     type: constant_string
     value: prometheus-kube-state-metrics
   name: service
   type: String
 - dist:
     preset:
+    - value: 438ceb9c-52bb-4988-bf02-f676fa4f25bc
+      weight: 1
+    type: weighted_preset
+  name: uid
+  type: String
+- dist:
+    preset:
     type: replica_string
-    replica: 20
+    replica: 10
     replica_prefix: extra-
   name: extra
   type: String
 - dist:
     preset:
     type: replica_string
-    replica: 20
+    replica: 5
     replica_prefix: uid-
   name: uuid
   type: String
