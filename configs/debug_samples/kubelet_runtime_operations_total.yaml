@@ -61,6 +61,8 @@ tags:
               weight: 1
             - value: operation_type2
               weight: 1
+            - value: operation_type3
+              weight: 1
     - name: prometheus
       type: String
       dist:

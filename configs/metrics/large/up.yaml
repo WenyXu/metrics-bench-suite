@@ -60,13 +60,6 @@ tags:
   type: String
 - dist:
     preset:
-    - value: etcd
-      weight: 1
-    type: weighted_preset
-  name: container
-  type: String
-- dist:
-    preset:
     - value: https
       weight: 1
     type: weighted_preset
@@ -142,20 +135,6 @@ tags:
   type: String
 - dist:
     preset:
-    - value: etcd
-      weight: 1
-    type: weighted_preset
-  name: namespace
-  type: String
-- dist:
-    preset:
-    - value: ip-10-0-169-179.ec2.internal
-      weight: 1
-    type: weighted_preset
-  name: node
-  type: String
-- dist:
-    preset:
     - value: etcd-0
       weight: 1
     type: weighted_preset
@@ -175,6 +154,8 @@ tags:
     preset:
     - value: us-east-1
       weight: 1
+    - value: us-east-1a
+      weight: 1
     type: weighted_preset
   name: region
   type: String
@@ -188,6 +169,8 @@ tags:
 - dist:
     preset:
     - value: us-east-1a
+      weight: 1
+    - value: us-east-1b
       weight: 1
     type: weighted_preset
   name: zone

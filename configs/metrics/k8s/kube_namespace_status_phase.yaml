@@ -12,8 +12,14 @@ precision: 1000
 start: '2021-01-01T00:00:00Z'
 tags:
 - dist:
-    type: constant_string
-    value: eks-us-east-1-qa1
+    type: weighted_preset
+    preset:
+    - value: eks-us-east-1-qa1
+      weight: 1
+    - value: eks-us-east-1-prod
+      weight: 1
+    - value: eks-us-east-1-test
+      weight: 1
   name: cluster
   type: String
 - dist:

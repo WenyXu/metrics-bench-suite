@@ -20,12 +20,6 @@ tags:
     preset:
     - value: Ready
       weight: 1
-    - value: PIDPressure
-      weight: 1
-    - value: MemoryPressure
-      weight: 1
-    - value: DiskPressure
-      weight: 1
     type: weighted_preset
   name: condition
   type: String
@@ -68,14 +62,6 @@ tags:
     preset:
     - value: ip-10-0-166-131.ec2.internal
       weight: 1
-    - value: ip-10-0-162-77.ec2.internal
-      weight: 1
-    - value: ip-10-0-162-53.ec2.internal
-      weight: 1
-    - value: ip-10-0-175-164.ec2.internal
-      weight: 1
-    - value: ip-10-0-169-179.ec2.internal
-      weight: 1
     type: weighted_preset
   name: node
   type: String
@@ -104,8 +90,6 @@ tags:
     - value: 'false'
       weight: 1
     - value: 'true'
-      weight: 1
-    - value: unknown
       weight: 1
     type: weighted_preset
   name: status

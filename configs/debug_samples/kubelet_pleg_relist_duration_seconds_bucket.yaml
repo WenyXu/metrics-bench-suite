@@ -46,8 +46,6 @@ tags:
               weight: 1
             - value: "0.25"
               weight: 1
-            - value: "0.025"
-              weight: 1
             - value: "5"
               weight: 1
             - value: "0.1"

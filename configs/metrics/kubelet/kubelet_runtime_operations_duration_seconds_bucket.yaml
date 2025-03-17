@@ -22,8 +22,14 @@ tags:
   name: endpoint
   type: String
 - dist:
-    type: constant_string
-    value: qa
+    type: weighted_preset
+    preset:
+    - value: qa
+      weight: 1
+    - value: prod
+      weight: 1
+    - value: test
+      weight: 1
   name: env
   type: String
 - dist:

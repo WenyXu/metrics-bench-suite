@@ -50,33 +50,7 @@ tags:
               weight: 1
             - value: "3600"
               weight: 1
-            - value: "1200"
-              weight: 1
-            - value: "480"
-              weight: 1
-            - value: "6"
-              weight: 1
-            - value: "2"
-              weight: 1
-            - value: "30"
-              weight: 1
-            - value: "240"
-              weight: 1
-            - value: "180"
-              weight: 1
-            - value: "60"
-              weight: 1
-            - value: "20"
-              weight: 1
-            - value: "4"
-              weight: 1
-            - value: "360"
-              weight: 1
-            - value: "5"
-              weight: 1
-            - value: "8"
-              weight: 1
-            - value: "1800"
+            - value: "Inf+"
               weight: 1
     - name: metrics_path
       type: String

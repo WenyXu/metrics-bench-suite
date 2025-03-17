@@ -27,6 +27,12 @@ tags:
     preset:
     - value: /dev/nvme2n1
       weight: 1
+    - value: /dev/nvme3n1
+      weight: 1
+    - value: /dev/nvme0n2
+      weight: 1
+    - value: /dev/nvme0n1
+      weight: 1
     type: weighted_preset
   name: device
   type: String
@@ -36,8 +42,12 @@ tags:
   name: endpoint
   type: String
 - dist:
-    type: constant_string
-    value: qa
+    type: weighted_preset
+    preset:
+    - value: qa
+      weight: 1
+    - value: prod
+      weight: 1
   name: env
   type: String
 - dist:

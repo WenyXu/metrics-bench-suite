@@ -182,8 +182,12 @@ tags:
   name: instance
   type: String
 - dist:
-    type: constant_string
-    value: kubelet
+    type: weighted_preset
+    preset:
+    - value: kubelet
+      weight: 1
+    - value: other
+      weight: 1
   name: job
   type: String
 - dist:

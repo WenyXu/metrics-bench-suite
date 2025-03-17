@@ -1,12 +1,14 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"log"
 	"math"
 	"metrics-bench-suite/pkg/samples"
 	"os"
 	"slices"
+	"strconv"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -15,14 +17,15 @@ import (
 
 // ConfigModifier is a tool that modifies the config file to meet the target time series number.
 type ConfigModifier struct {
-	ConfigPath    string
-	OutputPath    string
-	TargetSeries  int
-	NumPods       int
-	NumNodes      int
-	NumInstances  int
-	NumNamespaces int
-	NumWorkloads  int
+	ConfigPath       string
+	OutputPath       string
+	TargetSeries     int
+	NumPods          int
+	NumNodes         int
+	NumInstances     int
+	NumNamespaces    int
+	NumWorkloads     int
+	ExpectTimeseries string
 }
 
 var queryLabels = map[string]string{
@@ -48,9 +51,58 @@ var largeSeriesMetrics = []string{
 	"process_cpu_seconds_total",
 	"process_resident_memory_bytes",
 	"rest_client_requests_total",
-	"up",
 	"process_resident_memory_bytes",
 	"kube_node_status_allocatable",
+}
+
+var noLimit = []string{
+	"write_kube_pod_container_status_last_terminated_reason",
+	"write_kube_pod_info",
+	"write_kube_pod_owner",
+}
+
+// parseExpectTimeseries parses the expect timeseries file and returns a map of metric name to expected timeseries number
+func parseExpectTimeseries(expectTimeseriesPath string) (map[string]int, error) {
+	if expectTimeseriesPath == "" {
+		return map[string]int{}, nil
+	}
+
+	file, err := os.Open(expectTimeseriesPath)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	data := make(map[string]int)
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if line == "" {
+			continue
+		}
+
+		if strings.HasSuffix(line, "{}") {
+			key := line[:len(line)-2]
+
+			if !scanner.Scan() {
+				return nil, fmt.Errorf("unexpected end of file")
+			}
+
+			valueStr := strings.TrimSpace(scanner.Text())
+			value, err := strconv.Atoi(valueStr)
+			if err != nil {
+				return nil, fmt.Errorf("error parsing value: %s, %v", valueStr, err)
+			}
+
+			data[key] = value
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, fmt.Errorf("error reading file: %v", err)
+	}
+
+	return data, nil
 }
 
 func (c *ConfigModifier) run(cmd *cobra.Command, args []string) error {
@@ -88,7 +140,16 @@ func (c *ConfigModifier) run(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+	c.ExpectTimeseries, err = cmd.Flags().GetString("expect-timeseries")
+	if err != nil {
+		return err
+	}
 	fileConfigs, err := samples.WalkAndParseConfig(c.ConfigPath)
+	if err != nil {
+		return err
+	}
+
+	expectTimeseries, err := parseExpectTimeseries(c.ExpectTimeseries)
 	if err != nil {
 		return err
 	}
@@ -183,10 +244,12 @@ func (c *ConfigModifier) run(cmd *cobra.Command, args []string) error {
 		if slices.Contains(largeSeriesMetrics, fileConfig.Name) {
 			maxNDV = 1
 		}
-		for i := range len(fileConfig.Config.Tags) {
-			label := strings.ToLower(fileConfig.Config.Tags[i].Name)
-			if _, exists := queryLabels[label]; !exists {
-				fileConfig.Config.Tags[i].Dist.SetReplica(int(maxNDV), label)
+		if !slices.Contains(noLimit, fileConfig.Name) {
+			for i := range len(fileConfig.Config.Tags) {
+				label := strings.ToLower(fileConfig.Config.Tags[i].Name)
+				if _, exists := queryLabels[label]; !exists {
+					fileConfig.Config.Tags[i].Dist.SetReplica(int(maxNDV), label)
+				}
 			}
 		}
 
@@ -198,7 +261,14 @@ func (c *ConfigModifier) run(cmd *cobra.Command, args []string) error {
 		if totalSeries > c.TargetSeries {
 			log.Printf("Processing file: %s, total series: %d, tags: %d", fileConfig.Name, totalSeries, len(fileConfig.Config.Tags))
 		}
+
+		if expectedSeries, exists := expectTimeseries[fileConfig.Name]; exists {
+			if totalSeries != expectedSeries {
+				log.Printf("Processing file: %s, total series: %d, expected series: %d", fileConfig.Name, totalSeries, expectedSeries)
+			}
+		}
 	}
+
 	log.Printf("All files time series: %d", allFilesTags)
 
 	err = os.MkdirAll(c.OutputPath, 0755)
@@ -242,6 +312,7 @@ func main() {
 	rootCmd.Flags().IntP("num-namespaces", "N", 50, "The number of namespaces")
 	rootCmd.Flags().IntP("num-workloads", "w", 4, "The number of workloads")
 	rootCmd.Flags().IntP("target-series", "t", 10000, "The target time series number for each metric")
+	rootCmd.Flags().StringP("expect-timeseries", "e", "", "The expected time series number for each metric")
 
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatalf("Error: %v", err)

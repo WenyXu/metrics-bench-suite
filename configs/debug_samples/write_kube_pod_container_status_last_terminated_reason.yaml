@@ -1,0 +1,120 @@
+end: '2021-01-01T00:00:00Z'
+fields:
+- dist:
+    lower_bound: 1
+    step: 10
+    type: mono_inc
+    upper_bound: 1000
+  name: greptime_value
+  type: Float
+interval: 30
+precision: 1000
+start: '2021-01-01T00:00:00Z'
+tags:
+- dist:
+    type: constant_string
+    value: eks-us-east-1-qa1
+  name: cluster
+  type: String
+- dist:
+    preset:
+    - value: jarvis-consumer
+      weight: 1
+    - value: internal-greptimedb-standalone
+      weight: 1
+    - value: jarvis-api
+      weight: 1
+    - value: efs-plugin
+      weight: 1
+    type: weighted_preset
+  name: container
+  type: String
+- dist:
+    type: constant_string
+    value: http
+  name: endpoint
+  type: String
+- dist:
+    type: constant_string
+    value: qa
+  name: env
+  type: String
+- dist:
+    type: constant_string
+    value: 'false'
+  name: holiday
+  type: String
+- dist:
+    type: constant_string
+    value: 10.0.169.98:8080
+  name: instance
+  type: String
+- dist:
+    type: constant_string
+    value: kube-state-metrics
+  name: job
+  type: String
+- dist:
+    preset:
+    - value: jarvis
+      weight: 1
+    - value: internal-greptimedb-standalone
+      weight: 1
+    - value: kube-system
+      weight: 1
+    type: weighted_preset
+  name: namespace
+  type: String
+- dist:
+    preset:
+    - value: jarvis-consumer-86999fbb4f-f6gdm
+      weight: 1
+    - value: internal-greptimedb-standalone-0
+      weight: 1
+    - value: jarvis-api-6d9988949f-vqdvl
+      weight: 1
+    - value: efs-csi-node-7ln4t
+      weight: 1
+    type: weighted_preset
+  name: pod
+  type: String
+- dist:
+    type: constant_string
+    value: monitoring/prometheus-kube-prometheus-prometheus
+  name: prometheus
+  type: String
+- dist:
+    type: constant_string
+    value: prometheus-prometheus-kube-prometheus-prometheus-0
+  name: prometheus_replica
+  type: String
+- dist:
+    preset:
+    - value: Error
+      weight: 1
+    - value: OOMKilled
+      weight: 1
+    - value: StartError
+      weight: 1
+    type: weighted_preset
+  name: reason
+  type: String
+- dist:
+    type: constant_string
+    value: prometheus-kube-state-metrics
+  name: service
+  type: String
+- dist:
+    preset:
+    type: replica_string
+    replica: 20
+    replica_prefix: extra-
+  name: extra
+  type: String
+- dist:
+    preset:
+    type: replica_string
+    replica: 20
+    replica_prefix: uid-
+  name: uuid
+  type: String

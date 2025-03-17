@@ -80,12 +80,6 @@ tags:
         preset:
             - value: hostname0
               weight: 1
-    - name: instance
-      type: String
-      dist:
-        type: replica_string
-        replica: 1
-        replica_prefix: instance-
     - name: instance_type
       type: String
       dist:
@@ -128,10 +122,6 @@ tags:
       dist:
         type: weighted_preset
         preset:
-            - value: /metrics/cadvisor
-              weight: 1
-            - value: /metrics/probes
-              weight: 1
             - value: /metrics
               weight: 1
     - name: namespace

@@ -57,19 +57,11 @@ tags:
       weight: 1
     - value: '1'
       weight: 1
-    - value: '0.05'
-      weight: 1
-    - value: '0.25'
-      weight: 1
-    - value: '0.025'
-      weight: 1
     - value: '5'
       weight: 1
     - value: '0.1'
       weight: 1
     - value: '2.5'
-      weight: 1
-    - value: '0.01'
       weight: 1
     - value: '0.5'
       weight: 1
@@ -93,14 +85,6 @@ tags:
 - dist:
     preset:
     - value: ip-10-0-169-179.ec2.internal
-      weight: 1
-    - value: ip-10-0-166-131.ec2.internal
-      weight: 1
-    - value: ip-10-0-162-53.ec2.internal
-      weight: 1
-    - value: ip-10-0-175-164.ec2.internal
-      weight: 1
-    - value: ip-10-0-162-77.ec2.internal
       weight: 1
     type: weighted_preset
   name: node

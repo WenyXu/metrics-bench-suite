@@ -93,8 +93,6 @@ tags:
     preset:
     - value: byte
       weight: 1
-    - value: integer
-      weight: 1
     - value: core
       weight: 1
     type: weighted_preset

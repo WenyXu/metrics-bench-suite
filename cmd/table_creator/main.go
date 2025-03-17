@@ -31,6 +31,7 @@ on_physical_table = '%s'
 );
 `
 
+var physicalTbaleColumnTemplateInverted = "`%s` STRING NULL INVERTED INDEX"
 var physicalTbaleColumnTemplate = "`%s` STRING NULL SKIPPING INDEX WITH(granularity = '%d', type = 'BLOOM')"
 var physicalTableCreateTableSQLTemplate = `
 CREATE TABLE %s (
@@ -42,7 +43,7 @@ PRIMARY KEY (%s)
     "physical_metric_table" = "",   
     "memtable.type" = "partition_tree",
     "memtable.partition_tree.primary_key_encoding" = "sparse",
-	"index.type" = "skipping", 
+	"index.type" = "inverted", 
 	"index.granularity" = "%d",
 	"compaction.type" = "twcs",
 	"compaction.twcs.time_window" = "2h",
@@ -96,7 +97,7 @@ func (t *TableCreator) Run(cmd *cobra.Command, args []string) error {
 	var columnDef string
 	var primaryKey string
 	for label := range labels {
-		columnDef += fmt.Sprintf(physicalTbaleColumnTemplate, label, t.SkippingIndexGranularity) + ",\n"
+		columnDef += fmt.Sprintf(physicalTbaleColumnTemplateInverted, label) + ",\n"
 		primaryKey += fmt.Sprintf("`%s`,", label)
 	}
 

@@ -52,13 +52,6 @@ tags:
   name: namespace
   type: String
 - dist:
-    preset:
-    - value: ip-10-0-162-53.ec2.internal
-      weight: 1
-    type: weighted_preset
-  name: node
-  type: String
-- dist:
     type: constant_string
     value: prometheus-kube-state-metrics-8f664f9c8-cdcrg
   name: pod
@@ -91,8 +84,6 @@ tags:
   type: String
 - dist:
     preset:
-    - value: byte
-      weight: 1
     - value: integer
       weight: 1
     - value: core
