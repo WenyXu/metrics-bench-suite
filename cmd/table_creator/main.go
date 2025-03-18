@@ -32,7 +32,6 @@ on_physical_table = '%s'
 `
 
 var physicalTbaleColumnTemplateInverted = "`%s` STRING NULL INVERTED INDEX"
-var physicalTbaleColumnTemplate = "`%s` STRING NULL SKIPPING INDEX WITH(granularity = '%d', type = 'BLOOM')"
 var physicalTableCreateTableSQLTemplate = `
 CREATE TABLE %s (
 greptime_timestamp TIMESTAMP(3) NOT NULL,
@@ -46,7 +45,7 @@ PRIMARY KEY (%s)
 	"index.type" = "inverted", 
 	"index.granularity" = "%d",
 	"compaction.type" = "twcs",
-	"compaction.twcs.time_window" = "2h",
+	"compaction.twcs.time_window" = "1d",
 );
 `
 
