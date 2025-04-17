@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/rand/v2"
 	"metrics-bench-suite/pkg/http"
 	"metrics-bench-suite/pkg/samples"
 	"sync"
@@ -74,6 +75,10 @@ func (s *SampleLoader) run(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
+	TagsPickRate, err := cmd.Flags().GetFloat32("tags-pick-rate")
+	if err != nil {
+		return err
+	}
 	log.Printf("Start date: %s", s.StartDate)
 	log.Printf("End date: %s", s.EndDate)
 	log.Printf("Interval: %s", s.Interval)
@@ -135,7 +140,7 @@ func (s *SampleLoader) run(cmd *cobra.Command, args []string) error {
 
 	for range ticker.C {
 		log.Printf("Generating samples for %s", current)
-		convertToRemoteWriteRequests(metrics, current, s.MaxSamples, requestChan)
+		convertToRemoteWriteRequests(metrics, current, s.MaxSamples, requestChan, TagsPickRate)
 		current = current.Add(s.Interval)
 		if !s.Infinite {
 			if current.After(s.EndDate) {
@@ -164,7 +169,7 @@ func worker(id int, url string, request <-chan prompb.WriteRequest, wg *sync.Wai
 	}
 }
 
-func convertMetricToTimeSeries(metric metric, current time.Time) []prompb.TimeSeries {
+func convertMetricToTimeSeries(metric metric, current time.Time, pickRate float32) []prompb.TimeSeries {
 	tsSet := make([]prompb.TimeSeries, 0)
 	for i, label := range metric.Series {
 		ts := prompb.TimeSeries{
@@ -176,11 +181,17 @@ func convertMetricToTimeSeries(metric metric, current time.Time) []prompb.TimeSe
 			Value: metric.Name,
 		})
 		for k, v := range label {
+			if pickRate < 1.0 {
+				if rand.Float32() > pickRate {
+					continue
+				}
+			}
 			ts.Labels = append(ts.Labels, prompb.Label{
 				Name:  k,
 				Value: v,
 			})
 		}
+		log.Printf("metric %s has %d labels", metric.Name, len(ts.Labels))
 
 		generator := metric.Fields[i]
 		ts.Samples = append(ts.Samples, prompb.Sample{
@@ -193,11 +204,11 @@ func convertMetricToTimeSeries(metric metric, current time.Time) []prompb.TimeSe
 	return tsSet
 }
 
-func convertToRemoteWriteRequests(metrics []metric, current time.Time, maxSamples int, requestChan chan<- prompb.WriteRequest) {
+func convertToRemoteWriteRequests(metrics []metric, current time.Time, maxSamples int, requestChan chan<- prompb.WriteRequest, pickRate float32) {
 
 	tsSet := make([]prompb.TimeSeries, 0)
 	for _, metric := range metrics {
-		tsSet = append(tsSet, convertMetricToTimeSeries(metric, current)...)
+		tsSet = append(tsSet, convertMetricToTimeSeries(metric, current, pickRate)...)
 	}
 	for len(tsSet) > 0 {
 		if len(tsSet) > maxSamples {
@@ -236,6 +247,7 @@ func main() {
 	rootCmd.Flags().StringP("tick-interval", "t", "30s", "The interval of the requests")
 	rootCmd.Flags().IntP("workers", "w", 1, "The number of workers to send requests")
 	rootCmd.Flags().BoolP("infinite", "i", false, "Run indefinitely")
+	rootCmd.Flags().Float32P("tags-pick-rate", "p", 1.0, "The rate of the pick tags")
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatalf("Error: %v", err)
 	}
