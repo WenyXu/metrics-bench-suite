@@ -1,0 +1,51 @@
+CREATE DATABASE IF NOT EXISTS `public`;
+
+--- namespace available values: app-0,...,app-23
+CREATE TABLE `public`.`greptime_physical_table` (
+greptime_timestamp TIMESTAMP(3) NOT NULL,
+greptime_value DOUBLE NULL,
+`namespace` STRING NULL INVERTED INDEX,
+PRIMARY KEY (`namespace`),
+TIME INDEX (greptime_timestamp),
+)
+PARTITION ON COLUMNS (`namespace`) (
+`namespace` == 'app-0',
+`namespace` == 'app-1',
+`namespace` == 'app-2',
+`namespace` == 'app-3',
+`namespace` == 'app-4',
+`namespace` == 'app-5',
+`namespace` == 'app-6',
+`namespace` == 'app-7',
+`namespace` == 'app-8',
+`namespace` == 'app-9',
+`namespace` == 'app-10',
+`namespace` == 'app-11',
+`namespace` == 'app-12',
+`namespace` == 'app-13',
+`namespace` == 'app-14',
+`namespace` == 'app-15',
+`namespace` == 'app-16',
+`namespace` == 'app-17',
+`namespace` == 'app-18',
+`namespace` == 'app-19',
+`namespace` == 'app-20',
+`namespace` == 'app-21',
+`namespace` == 'app-22',
+`namespace` == 'app-23',
+`namespace` == 'app-24',
+`namespace` == 'app-25',
+`namespace` == 'app-26',
+`namespace` == 'app-27',
+`namespace` == 'app-28',
+`namespace` == 'app-29',
+)
+ENGINE = metric WITH (
+    "physical_metric_table" = "",
+    "memtable.type" = "partition_tree",
+    "memtable.partition_tree.primary_key_encoding" = "sparse",
+	"index.type" = "inverted",
+	"index.granularity" = "8192",
+	"compaction.type" = "twcs",
+	"compaction.twcs.time_window" = "2h",
+);
