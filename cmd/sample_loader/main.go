@@ -191,7 +191,6 @@ func convertMetricToTimeSeries(metric metric, current time.Time, pickRate float3
 				Value: v,
 			})
 		}
-		log.Printf("metric %s has %d labels", metric.Name, len(ts.Labels))
 
 		generator := metric.Fields[i]
 		ts.Samples = append(ts.Samples, prompb.Sample{
