@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/fs"
 	"log"
+	"math"
 	"os"
 	"path/filepath"
 
@@ -22,8 +23,7 @@ func getFileNameWithoutExt(path string) string {
 	return base[:len(base)-len(ext)]
 }
 
-// WalkAndParseConfig walks a directory and parses all YAML files, returning a list of FileConfig
-func WalkAndParseConfig(path string) ([]FileConfig, error) {
+func WalkAndParseConfigWithMaxFileCount(path string, tablePickCount uint64) ([]FileConfig, error) {
 	var fileConfigs []FileConfig
 
 	err := filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
@@ -44,6 +44,10 @@ func WalkAndParseConfig(path string) ([]FileConfig, error) {
 				Name:   name,
 				Config: data,
 			})
+			if uint64(len(fileConfigs)) > tablePickCount {
+				log.Printf("Warning: More than %d YAML files found. Only the first %d will be used.\n", tablePickCount, tablePickCount)
+				return fs.SkipAll
+			}
 		}
 		return nil
 	})
@@ -53,6 +57,11 @@ func WalkAndParseConfig(path string) ([]FileConfig, error) {
 	}
 
 	return fileConfigs, nil
+}
+
+// WalkAndParseConfig walks a directory and parses all YAML files, returning a list of FileConfig
+func WalkAndParseConfig(path string) ([]FileConfig, error) {
+	return WalkAndParseConfigWithMaxFileCount(path, math.MaxUint64)
 }
 
 // parseYAML parses a YAML file and returns a Config

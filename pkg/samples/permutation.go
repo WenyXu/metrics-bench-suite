@@ -1,6 +1,9 @@
 package samples
 
-import "fmt"
+import (
+	"fmt"
+	"maps"
+)
 
 // Label is a struct that represents a label in a metric.
 type Label struct {
@@ -39,9 +42,7 @@ func generatePermutations(keys []string, values [][]string, current map[string]s
 	if depth == len(keys) {
 		// Make a copy of the current map and add it to the permutations
 		perm := make(map[string]string)
-		for k, v := range current {
-			perm[k] = v
-		}
+		maps.Copy(perm, current)
 		*permutations = append(*permutations, perm)
 		return
 	}

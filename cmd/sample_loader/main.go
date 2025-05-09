@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math"
 	"math/rand/v2"
 	"metrics-bench-suite/pkg/http"
 	"metrics-bench-suite/pkg/samples"
@@ -25,6 +26,8 @@ type SampleLoader struct {
 	TickInterval   time.Duration
 	Workers        int
 	Infinite       bool
+	TagsPickRate   float32
+	TablePickCount uint64
 }
 
 type metric struct {
@@ -33,7 +36,7 @@ type metric struct {
 	Fields []samples.FloatGenerator
 }
 
-func (s *SampleLoader) run(cmd *cobra.Command, args []string) error {
+func (s *SampleLoader) run(cmd *cobra.Command, _ []string) error {
 	var err error
 	intervalStr, _ := cmd.Flags().GetString("interval")
 	initialDateStr, _ := cmd.Flags().GetString("start-date")
@@ -75,7 +78,11 @@ func (s *SampleLoader) run(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	TagsPickRate, err := cmd.Flags().GetFloat32("tags-pick-rate")
+	s.TagsPickRate, err = cmd.Flags().GetFloat32("tags-pick-rate")
+	if err != nil {
+		return err
+	}
+	s.TablePickCount, err = cmd.Flags().GetUint64("table-pick-count")
 	if err != nil {
 		return err
 	}
@@ -84,8 +91,10 @@ func (s *SampleLoader) run(cmd *cobra.Command, args []string) error {
 	log.Printf("Interval: %s", s.Interval)
 	log.Printf("Tick interval: %s", s.TickInterval)
 	log.Printf("Config path: %s", s.ConfigPath)
+	log.Printf("Tags pick rate: %f", s.TagsPickRate)
+	log.Printf("Table pick rate: %d", s.TablePickCount)
 
-	fileConfigs, err := samples.WalkAndParseConfig(s.ConfigPath)
+	fileConfigs, err := samples.WalkAndParseConfigWithMaxFileCount(s.ConfigPath, s.TablePickCount)
 	if err != nil {
 		return err
 	}
@@ -140,7 +149,7 @@ func (s *SampleLoader) run(cmd *cobra.Command, args []string) error {
 
 	for range ticker.C {
 		log.Printf("Generating samples for %s", current)
-		convertToRemoteWriteRequests(metrics, current, s.MaxSamples, requestChan, TagsPickRate)
+		convertToRemoteWriteRequests(metrics, current, s.MaxSamples, requestChan, s.TagsPickRate)
 		current = current.Add(s.Interval)
 		if !s.Infinite {
 			if current.After(s.EndDate) {
@@ -247,6 +256,7 @@ func main() {
 	rootCmd.Flags().IntP("workers", "w", 1, "The number of workers to send requests")
 	rootCmd.Flags().BoolP("infinite", "i", false, "Run indefinitely")
 	rootCmd.Flags().Float32P("tags-pick-rate", "p", 1.0, "The rate of the pick tags")
+	rootCmd.Flags().Uint64P("table-pick-count", "n", math.MaxUint64, "The number of tables to pick from")
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatalf("Error: %v", err)
 	}
