@@ -148,7 +148,7 @@ func generateSampleLoaderYaml(tableInfos *[]map[string]any, targetFilePath strin
 func run(columnListCount, sampleCount int, columnCountRange [2]int, targetPath string) error {
 
 	physicalTableSQLFileName := fmt.Sprintf("%s/physical_table.sql", targetPath)
-	metricsTableSQLFileName := fmt.Sprintf("%s.metrics_table.sql", targetPath)
+	metricsTableSQLFileName := fmt.Sprintf("%s/metrics_table.sql", targetPath)
 
 	// Generate SQL for creating a physical table
 	physicalTableNameList, physicalTableSQL := generatePhysicalTableSQL(400)
