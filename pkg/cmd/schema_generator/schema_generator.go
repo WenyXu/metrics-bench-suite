@@ -222,8 +222,8 @@ func (schema_generator *SchemaGenerator) run() error {
 		log.Printf("Error generating sample loader YAML: %v\n", err)
 		return err
 	}
-	schema_generator.doExecSQLConcurrently(maps.Values(physicalTableSqlMap), 4)
-	schema_generator.doExecSQLConcurrently(maps.Values(metricsTableSqlMap), 4)
+	schema_generator.doExecSQLConcurrently(maps.Values(physicalTableSqlMap), schema_generator.doExecSQLJobCount)
+	schema_generator.doExecSQLConcurrently(maps.Values(metricsTableSqlMap), schema_generator.doExecSQLJobCount)
 	return nil
 }
 

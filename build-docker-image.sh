@@ -6,28 +6,28 @@ perform_push_operations() {
     local current_container_engine="$2"
 
     DEFAULT_REGISTRY_HOST="greptime-registry.cn-hangzhou.cr.aliyuncs.com/tools"
-    read -p "请输入镜像仓库地址 (默认为 $DEFAULT_REGISTRY_HOST): " REGISTRY_HOST
+    read -p "Please enter the image registry address (default is $DEFAULT_REGISTRY_HOST): " REGISTRY_HOST
     if [ -z "$REGISTRY_HOST" ]; then
         REGISTRY_HOST="$DEFAULT_REGISTRY_HOST"
-        echo "使用默认镜像仓库地址: $REGISTRY_HOST"
+        echo "Using default image registry address: $REGISTRY_HOST"
     fi
 
     REMOTE_IMAGE_NAME="$REGISTRY_HOST/$image_to_push"
 
-    echo "正在标记镜像 $image_to_push 为 $REMOTE_IMAGE_NAME ..."
+    echo "Tagging image $image_to_push as $REMOTE_IMAGE_NAME ..."
     if ! "$current_container_engine" tag "$image_to_push" "$REMOTE_IMAGE_NAME"; then
-        echo "错误：镜像标记失败。"
+        echo "Error: Image tagging failed."
         return 1
     fi
-    echo "镜像标记成功。"
+    echo "Image tagged successfully."
 
-    echo "正在推送镜像 $REMOTE_IMAGE_NAME ..."
+    echo "Pushing image $REMOTE_IMAGE_NAME ..."
     if ! "$current_container_engine" push "$REMOTE_IMAGE_NAME"; then
-        echo "错误：镜像推送失败。"
-        echo "请确保您已登录到 $REGISTRY_HOST ($current_container_engine login $REGISTRY_HOST)"
+        echo "Error: Image push failed."
+        echo "Please ensure you are logged in to $REGISTRY_HOST ($current_container_engine login $REGISTRY_HOST)"
         return 1
     fi
-    echo "镜像 $REMOTE_IMAGE_NAME 推送成功。"
+    echo "Image $REMOTE_IMAGE_NAME pushed successfully."
     return 0
 }
 
@@ -37,164 +37,164 @@ if [[ "$1" == "only-push" ]]; then
     SCRIPT_MODE="only-push"
 fi
 
-# 检查 podman 是否可用
+# Check if podman is available
 if command -v podman &> /dev/null; then
     CONTAINER_ENGINE="podman"
-# 否则，检查 docker 是否可用
+# Otherwise, check if docker is available
 elif command -v docker &> /dev/null; then
     CONTAINER_ENGINE="docker"
 else
-    echo "错误：未找到 podman 或 docker。请安装其中一个。"
+    echo "Error: Neither podman nor docker found. Please install one of them."
     exit 1
 fi
-echo "将使用 $CONTAINER_ENGINE。"
+echo "Will use $CONTAINER_ENGINE."
 
 if [[ "$SCRIPT_MODE" == "only-push" ]]; then
-    echo "--- 仅推送模式 ---"
-    echo "可用的本地镜像列表:"
+    echo "--- Push-Only Mode ---"
+    echo "Available local images:"
     "$CONTAINER_ENGINE" images
 
-    read -p "请输入要推送的本地镜像名称 (例如, repository:tag): " LOCAL_IMAGE_TO_PUSH
+    read -p "Please enter the name of the local image to push (e.g., repository:tag): " LOCAL_IMAGE_TO_PUSH
     if [ -z "$LOCAL_IMAGE_TO_PUSH" ]; then
-        echo "错误：镜像名称不能为空。"
+        echo "Error: Image name cannot be empty."
         exit 1
     fi
 
-    # 检查镜像是否存在
+    # Check if the image exists
     if ! "$CONTAINER_ENGINE" image inspect "$LOCAL_IMAGE_TO_PUSH" &> /dev/null; then
-        echo "错误：本地镜像 $LOCAL_IMAGE_TO_PUSH 未找到。"
+        echo "Error: Local image $LOCAL_IMAGE_TO_PUSH not found."
         exit 1
     fi
 
-    echo "准备推送镜像: $LOCAL_IMAGE_TO_PUSH"
+    echo "Preparing to push image: $LOCAL_IMAGE_TO_PUSH"
     if perform_push_operations "$LOCAL_IMAGE_TO_PUSH" "$CONTAINER_ENGINE"; then
-        echo "镜像推送流程完成。"
+        echo "Image push process completed."
     else
-        echo "镜像推送流程失败。"
+        echo "Image push process failed."
         exit 1
     fi
 else # Default mode (build and then optionally push)
-    echo "--- 默认构建并推送模式 ---"
+    echo "--- Default Build and Push Mode ---"
 
-    # 以交互方式询问用户镜像标签
-    read -p "请输入镜像标签 (例如, latest, 1.0): " IMAGE_TAG
+    # Interactively ask the user for the image tag
+    read -p "Please enter the image tag (e.g., latest, 1.0): " IMAGE_TAG
 
-    # 检查标签是否为空
+    # Check if the tag is empty
     if [ -z "$IMAGE_TAG" ]; then
-        echo "错误：镜像标签不能为空。"
+        echo "Error: Image tag cannot be empty."
         exit 1
     fi
 
     BUILT_IMAGE_BASENAME="ingester" # As implied by original script
     LOCAL_BUILT_IMAGE_NAME="${BUILT_IMAGE_BASENAME}:${IMAGE_TAG}"
-    DOCKERFILE_PATH="Dockerfile" # 假设 Dockerfile 在当前目录
+    DOCKERFILE_PATH="Dockerfile" # Assume Dockerfile is in the current directory
 
-    # 检查 Dockerfile 是否存在
+    # Check if Dockerfile exists
     if [ ! -f "$DOCKERFILE_PATH" ]; then
-        echo "错误：在当前目录下未找到 $DOCKERFILE_PATH。"
-        echo "请确保 Dockerfile 存在于脚本执行的目录中。"
+        echo "Error: $DOCKERFILE_PATH not found in the current directory."
+        echo "Please ensure Dockerfile exists in the directory where the script is executed."
         exit 1
     fi
 
-    echo "正在构建镜像 $LOCAL_BUILT_IMAGE_NAME ..."
+    echo "Building image $LOCAL_BUILT_IMAGE_NAME ..."
 
-    # 构建镜像
+    # Build the image
     if "$CONTAINER_ENGINE" build -t "$LOCAL_BUILT_IMAGE_NAME" -f "$DOCKERFILE_PATH" .; then
-        echo "镜像 $LOCAL_BUILT_IMAGE_NAME 构建成功。"
+        echo "Image $LOCAL_BUILT_IMAGE_NAME built successfully."
     else
-        echo "错误：镜像构建失败。"
+        echo "Error: Image build failed."
         exit 1
     fi
 
-    # 询问是否推送到镜像仓库
-    read -p "是否要将镜像 $LOCAL_BUILT_IMAGE_NAME 推送到镜像仓库? (y/n): " PUSH_CONFIRMATION
+    # Ask whether to push to the image registry
+    read -p "Do you want to push the image $LOCAL_BUILT_IMAGE_NAME to the image registry? (y/n): " PUSH_CONFIRMATION
 
     if [[ "$PUSH_CONFIRMATION" == "y" || "$PUSH_CONFIRMATION" == "Y" ]]; then
         if perform_push_operations "$LOCAL_BUILT_IMAGE_NAME" "$CONTAINER_ENGINE"; then
-            echo "镜像推送流程完成。"
+            echo "Image push process completed."
         else
-            echo "镜像推送流程失败。"
+            echo "Image push process failed."
             exit 1
         fi
     else
-        echo "镜像 $LOCAL_BUILT_IMAGE_NAME 未推送到仓库。"
+        echo "Image $LOCAL_BUILT_IMAGE_NAME was not pushed to the registry."
     fi
 fi
 
-echo "脚本执行完毕。"
+echo "Script execution finished."
 exit 0
 
-# 检查 podman 是否可用
+# Check if podman is available
 if command -v podman &> /dev/null; then
     CONTAINER_ENGINE="podman"
-# 否则，检查 docker 是否可用
+# Otherwise, check if docker is available
 elif command -v docker &> /dev/null; then
     CONTAINER_ENGINE="docker"
 else
-    echo "错误：未找到 podman 或 docker。请安装其中一个。"
+    echo "Error: Neither podman nor docker found. Please install one of them."
     exit 1
 fi
 
-echo "将使用 $CONTAINER_ENGINE 来构建镜像。"
+echo "Will use $CONTAINER_ENGINE to build the image."
 
-# 以交互方式询问用户镜像标签
-read -p "请输入镜像标签 (例如, latest, 1.0): " IMAGE_TAG
+# Interactively ask the user for the image tag
+read -p "Please enter the image tag (e.g., latest, 1.0): " IMAGE_TAG
 
-# 检查标签是否为空
+# Check if the tag is empty
 if [ -z "$IMAGE_TAG" ]; then
-    echo "错误：镜像标签不能为空。"
+    echo "Error: Image tag cannot be empty."
     exit 1
 fi
 
 LOCAL_IMAGE_NAME="ingester:$IMAGE_TAG"
-DOCKERFILE_PATH="Dockerfile" # 假设 Dockerfile 在当前目录
+DOCKERFILE_PATH="Dockerfile" # Assume Dockerfile is in the current directory
 
-# 检查 Dockerfile 是否存在
+# Check if Dockerfile exists
 if [ ! -f "$DOCKERFILE_PATH" ]; then
-    echo "错误：在当前目录下未找到 $DOCKERFILE_PATH。"
-    echo "请确保 Dockerfile 存在于脚本执行的目录中。"
+    echo "Error: $DOCKERFILE_PATH not found in the current directory."
+    echo "Please ensure Dockerfile exists in the directory where the script is executed."
     exit 1
 fi
 
-echo "正在构建镜像 $LOCAL_IMAGE_NAME ..."
+echo "Building image $LOCAL_IMAGE_NAME ..."
 
-# 构建镜像
+# Build the image
 if "$CONTAINER_ENGINE" build -t "$LOCAL_IMAGE_NAME" -f "$DOCKERFILE_PATH" .; then
-    echo "镜像 $LOCAL_IMAGE_NAME 构建成功。"
+    echo "Image $LOCAL_IMAGE_NAME built successfully."
 else
-    echo "错误：镜像构建失败。"
+    echo "Error: Image build failed."
     exit 1
 fi
 
-# 询问是否推送到镜像仓库
-read -p "是否要将镜像推送到镜像仓库? (y/n): " PUSH_TO_REGISTRY
+# Ask whether to push to the image registry
+read -p "Do you want to push the image to the image registry? (y/n): " PUSH_TO_REGISTRY
 
 if [[ "$PUSH_TO_REGISTRY" == "y" || "$PUSH_TO_REGISTRY" == "Y" ]]; then
     DEFAULT_REGISTRY_HOST="greptime-registry.cn-hangzhou.cr.aliyuncs.com/tools"
-    read -p "请输入镜像仓库地址 (默认为 $DEFAULT_REGISTRY_HOST): " REGISTRY_HOST
+    read -p "Please enter the image registry address (default is $DEFAULT_REGISTRY_HOST): " REGISTRY_HOST
     if [ -z "$REGISTRY_HOST" ]; then
         REGISTRY_HOST="$DEFAULT_REGISTRY_HOST"
-        echo "使用默认镜像仓库地址: $REGISTRY_HOST"
+        echo "Using default image registry address: $REGISTRY_HOST"
     fi
 
     REMOTE_IMAGE_NAME="$REGISTRY_HOST/$LOCAL_IMAGE_NAME"
 
-    echo "正在标记镜像 $LOCAL_IMAGE_NAME 为 $REMOTE_IMAGE_NAME ..."
+    echo "Tagging image $LOCAL_IMAGE_NAME as $REMOTE_IMAGE_NAME ..."
     if "$CONTAINER_ENGINE" tag "$LOCAL_IMAGE_NAME" "$REMOTE_IMAGE_NAME"; then
-        echo "镜像标记成功。"
+        echo "Image tagged successfully."
     else
-        echo "错误：镜像标记失败。"
+        echo "Error: Image tagging failed."
         exit 1
     fi
 
-    echo "正在推送镜像 $REMOTE_IMAGE_NAME ..."
+    echo "Pushing image $REMOTE_IMAGE_NAME ..."
     if "$CONTAINER_ENGINE" push "$REMOTE_IMAGE_NAME"; then
-        echo "镜像 $REMOTE_IMAGE_NAME 推送成功。"
+        echo "Image $REMOTE_IMAGE_NAME pushed successfully."
     else
-        echo "错误：镜像推送失败。"
-        echo "请确保您已登录到 $REGISTRY_HOST ($CONTAINER_ENGINE login $REGISTRY_HOST)"
+        echo "Error: Image push failed."
+        echo "Please ensure you are logged in to $REGISTRY_HOST ($CONTAINER_ENGINE login $REGISTRY_HOST)"
         exit 1
     fi
 else
-    echo "镜像未推送到仓库。"
+    echo "Image was not pushed to the registry."
 fi
