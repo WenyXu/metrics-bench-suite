@@ -286,56 +286,6 @@ func (schema_generator *SchemaGenerator) doExecSQLConcurrently(sqls []string, jo
 	log.Println("All SQL execution tasks completed.")
 }
 
-// func (schema_generator *SchemaGenerator) doExecSQL(sqlFile string) {
-// 	if !schema_generator.execSQL {
-// 		log.Printf("Skipping execution of SQL file: %s\n", sqlFile)
-// 		return
-// 	}
-// 	log.Printf("Executing SQL file: %s\n", sqlFile)
-// 	// Open the SQL file
-// 	file, err := os.Open(sqlFile)
-// 	if err != nil {
-// 		log.Printf("Error opening SQL file: %v\n", err)
-// 		return
-// 	}
-// 	defer file.Close()
-
-// 	// Create a command to execute the SQL file
-// 	cmd := exec.Command("mysql", "-h", schema_generator.mysqlHost, "-P", schema_generator.mysqlPort)
-
-// 	cmd.Stdin = file
-
-// 	// Start the command
-// 	stdout, err := cmd.StdoutPipe()
-// 	if err != nil {
-// 		log.Printf("Error creating stdout pipe: %v\n", err)
-// 		return
-// 	}
-// 	stderr, err := cmd.StderrPipe()
-// 	if err != nil {
-// 		log.Printf("Error creating stderr pipe: %v\n", err)
-// 		return
-// 	}
-
-// 	if err := cmd.Start(); err != nil {
-// 		log.Printf("Error starting command: %v\n", err)
-// 		return
-// 	}
-
-// 	// Write the SQL file content to the command's stdin
-
-// 	// Read the command's stdout and stderr
-// 	stdoutBytes, _ := io.ReadAll(stdout)
-// 	stderrBytes, _ := io.ReadAll(stderr)
-
-// 	// Wait for the command to finish
-// 	if err := cmd.Wait(); err != nil {
-// 		log.Printf("Error executing SQL: %s\n", string(stderrBytes))
-// 	} else {
-// 		fmt.Println(string(stdoutBytes))
-// 	}
-// }
-
 func NewCommand() *cobra.Command {
 	var rootCmd = &cobra.Command{
 		Use:   "schema_generator",
