@@ -11,6 +11,8 @@ RUN make
 
 FROM ubuntu:22.04 as base
 
+RUN apt-get update && apt-get install -y mysql-client && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /metrics-loader
 COPY configs /configs
 COPY --from=builder /metrics-loader/bin/* /usr/local/bin/
