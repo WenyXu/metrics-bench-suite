@@ -103,33 +103,6 @@ func (s *SampleLoader) run(cmd *cobra.Command, _ []string) error {
 	}
 
 	log.Printf("Generating metrics...")
-	totalSeries := 0
-	metrics := make([]metric, len(fileConfigs))
-	for i, fileConfig := range fileConfigs {
-		labels := make([]samples.Label, 0)
-		for _, tag := range fileConfig.Config.Tags {
-			values := tag.Dist.LabelGenerator().All()
-			labels = append(labels, samples.Label{
-				Name:   tag.Name,
-				Values: values,
-			})
-		}
-
-		log.Printf("Process %s", fileConfig.Name)
-		tagSet := samples.TagSetPermutation(labels, &totalSeries)
-		fields := make([]samples.FloatGenerator, 0)
-		field := fileConfig.Config.Fields[0]
-		for range len(tagSet) {
-			fields = append(fields, field.Dist.FieldGenerator())
-		}
-		metrics[i] = metric{
-			Name:   fileConfig.Name,
-			Series: tagSet,
-			Fields: fields,
-		}
-	}
-
-	log.Printf("total time series: %d, for %d metrics", totalSeries, len(metrics))
 
 	ticker := time.NewTicker(s.TickInterval)
 	defer ticker.Stop()
@@ -149,7 +122,7 @@ func (s *SampleLoader) run(cmd *cobra.Command, _ []string) error {
 
 	for range ticker.C {
 		log.Printf("Generating samples for %s", current)
-		convertToRemoteWriteRequests(metrics, current, s.MaxSamples, requestChan, s.TagsPickRate)
+		s.convertToRemoteWriteRequestsStreaming(fileConfigs, current, s.MaxSamples, requestChan, s.TagsPickRate)
 		current = current.Add(s.Interval)
 		if !s.Infinite {
 			if current.After(s.EndDate) {
@@ -212,23 +185,156 @@ func convertMetricToTimeSeries(metric metric, current time.Time, pickRate float3
 	return tsSet
 }
 
-func convertToRemoteWriteRequests(metrics []metric, current time.Time, maxSamples int, requestChan chan<- prompb.WriteRequest, pickRate float32) {
-
-	tsSet := make([]prompb.TimeSeries, 0)
-	for _, metric := range metrics {
-		tsSet = append(tsSet, convertMetricToTimeSeries(metric, current, pickRate)...)
+// TagSetPermutationStream generates permutations on-demand using a goroutine
+func TagSetPermutationStream(labels []samples.LabelCandidates, permChan chan<- map[string]string, totalCount *int) {
+	defer close(permChan)
+	if len(labels) == 0 {
+		permChan <- make(map[string]string)
+		*totalCount++
+		return
 	}
-	for len(tsSet) > 0 {
-		if len(tsSet) > maxSamples {
-			requestChan <- prompb.WriteRequest{
-				Timeseries: tsSet[:maxSamples],
+
+	current := make([]int, len(labels))
+	end := make([]int, len(labels))
+	for i, label := range labels {
+		end[i] = len(label.Values)
+	}
+
+	// Generate all combinations
+	for {
+		// Create the current combination
+		series := make(map[string]string)
+		for i, label := range labels {
+			series[label.Name] = label.Values[current[i]]
+		}
+		permChan <- series
+		*totalCount++
+
+		// Increment the combination like counting in base-n
+		i := 0
+		for i < len(current) {
+			current[i]++
+			if current[i] < end[i] {
+				break
 			}
-			tsSet = tsSet[maxSamples:]
-		} else {
+			current[i] = 0
+			i++
+		}
+
+		// Check if we've exhausted all combinations
+		if i >= len(current) {
+			break
+		}
+	}
+}
+
+// generateTimeSeriesForFileConfig generates time series for a single file config using a dedicated goroutine
+func (s *SampleLoader) generateTimeSeriesForFileConfig(fileConfig samples.FileConfig, current time.Time, pickRate float32) <-chan prompb.TimeSeries {
+	timeSeriesChan := make(chan prompb.TimeSeries, 1) // Buffered to allow the goroutine to start
+
+	go func() {
+		defer close(timeSeriesChan)
+
+		labels := make([]samples.LabelCandidates, 0)
+		for _, tag := range fileConfig.Config.Tags {
+			values := tag.Dist.LabelGenerator().All()
+			labels = append(labels, samples.LabelCandidates{
+				Name:   tag.Name,
+				Values: values,
+			})
+		}
+
+		// Create a channel for the permutations
+		permChan := make(chan map[string]string, 1)
+
+		// Start a goroutine to generate permutations
+		go func() {
+			totalCount := 0
+			TagSetPermutationStream(labels, permChan, &totalCount)
+		}()
+
+		field := fileConfig.Config.Fields[0]
+
+		// Process each series one by one
+		for series := range permChan {
+			// Create a single time series for this specific tag combination
+			ts := prompb.TimeSeries{
+				Labels:  make([]prompb.Label, 0),
+				Samples: make([]prompb.Sample, 0),
+			}
+			ts.Labels = append(ts.Labels, prompb.Label{
+				Name:  "__name__",
+				Value: fileConfig.Name,
+			})
+			for k, v := range series {
+				if pickRate < 1.0 {
+					if rand.Float32() > pickRate {
+						continue
+					}
+				}
+				ts.Labels = append(ts.Labels, prompb.Label{
+					Name:  k,
+					Value: v,
+				})
+			}
+
+			// Create a field generator for this specific series
+			generator := field.Dist.FieldGenerator()
+			ts.Samples = append(ts.Samples, prompb.Sample{
+				Value:     generator.Next(),
+				Timestamp: current.UnixMilli(),
+			})
+
+			// Send this single time series to the channel
+			timeSeriesChan <- ts
+		}
+	}()
+
+	return timeSeriesChan
+}
+
+func (s *SampleLoader) convertToRemoteWriteRequestsStreaming(fileConfigs []samples.FileConfig, current time.Time, maxSamples int, requestChan chan<- prompb.WriteRequest, pickRate float32) {
+	// Create a combined channel that merges all time series from all file configs
+	timeSeriesChan := make(chan prompb.TimeSeries, len(fileConfigs))
+
+	var wg sync.WaitGroup
+	// Start a goroutine for each file config
+	for _, fileConfig := range fileConfigs {
+		wg.Add(1)
+		go func(fc samples.FileConfig) {
+			defer wg.Done()
+			// Get the time series channel for this file config
+			tsChan := s.generateTimeSeriesForFileConfig(fc, current, pickRate)
+			// Forward all time series to the main channel
+			for ts := range tsChan {
+				timeSeriesChan <- ts
+			}
+		}(fileConfig)
+	}
+
+	// Close the main channel when all goroutines are done
+	go func() {
+		wg.Wait()
+		close(timeSeriesChan)
+	}()
+
+	// Collect time series and send in batches
+	tsSet := make([]prompb.TimeSeries, 0, maxSamples)
+	for ts := range timeSeriesChan {
+		tsSet = append(tsSet, ts)
+		if len(tsSet) >= maxSamples {
+			// Send a batch when we reach maxSamples
 			requestChan <- prompb.WriteRequest{
 				Timeseries: tsSet,
 			}
-			tsSet = make([]prompb.TimeSeries, 0)
+			tsSet = make([]prompb.TimeSeries, 0, maxSamples) // Reset the slice
+		}
+	}
+
+	// Send any remaining time series
+	if len(tsSet) > 0 {
+		requestChan <- prompb.WriteRequest{
+			Timeseries: tsSet,
 		}
 	}
 }
