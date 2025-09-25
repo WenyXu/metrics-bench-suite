@@ -1,0 +1,125 @@
+start: "2021-01-01T00:00:00Z"
+end: "2021-01-01T00:00:00Z"
+interval: 30
+tags:
+    - name: cluster
+      type: String
+      dist:
+        type: constant_string
+        value: eks-us-east-1-qa1
+    - name: container
+      type: String
+      dist:
+        type: constant_string
+        value: container0
+    - name: endpoint
+      type: String
+      dist:
+        type: constant_string
+        value: http-metrics
+    - name: env
+      type: String
+      dist:
+        type: constant_string
+        value: qa
+    - name: holiday
+      type: String
+      dist:
+        type: constant_string
+        value: "false"
+    - name: instance
+      type: String
+      dist:
+        type: replica_string
+        replica: 1
+        replica_prefix: instance-
+    - name: job
+      type: String
+      dist:
+        type: constant_string
+        value: coredns
+    - name: le
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: "2047"
+              weight: 1
+            - value: "200"
+              weight: 1
+            - value: "1023"
+              weight: 1
+            - value: "511"
+              weight: 1
+            - value: "64000"
+              weight: 1
+            - value: "8291"
+              weight: 1
+            - value: "32000"
+              weight: 1
+            - value: "48000"
+              weight: 1
+            - value: "0"
+              weight: 1
+            - value: "16000"
+              weight: 1
+            - value: "100"
+              weight: 1
+            - value: +Inf
+              weight: 1
+            - value: "300"
+              weight: 1
+            - value: "4095"
+              weight: 1
+            - value: "400"
+              weight: 1
+    - name: namespace
+      type: String
+      dist:
+        type: replica_string
+        replica: 18
+        replica_prefix: app-
+    - name: pod
+      type: String
+      dist:
+        type: replica_string
+        replica: 2
+        replica_prefix: pod-
+    - name: prometheus
+      type: String
+      dist:
+        type: constant_string
+        value: monitoring/prometheus-kube-prometheus-prometheus
+    - name: prometheus_replica
+      type: String
+      dist:
+        type: constant_string
+        value: prometheus-prometheus-kube-prometheus-prometheus-0
+    - name: proto
+      type: String
+      dist:
+        type: constant_string
+        value: udp
+    - name: server
+      type: String
+      dist:
+        type: constant_string
+        value: dns://:53
+    - name: service
+      type: String
+      dist:
+        type: constant_string
+        value: prometheus-kube-prometheus-coredns
+    - name: zone
+      type: String
+      dist:
+        type: constant_string
+        value: .
+fields:
+    - name: greptime_value
+      type: Float
+      dist:
+        type: mono_inc
+        lower_bound: 1
+        upper_bound: 1000
+        step: 10

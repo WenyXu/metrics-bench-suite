@@ -1,0 +1,96 @@
+start: "2021-01-01T00:00:00Z"
+end: "2021-01-01T00:00:00Z"
+interval: 30
+tags:
+    - name: cluster
+      type: String
+      dist:
+        type: constant_string
+        value: eks-us-east-1-qa1
+    - name: container
+      type: String
+      dist:
+        type: constant_string
+        value: container0
+    - name: endpoint
+      type: String
+      dist:
+        type: constant_string
+        value: http
+    - name: env
+      type: String
+      dist:
+        type: constant_string
+        value: qa
+    - name: holiday
+      type: String
+      dist:
+        type: constant_string
+        value: "false"
+    - name: instance
+      type: String
+      dist:
+        type: replica_string
+        replica: 1
+        replica_prefix: instance-
+    - name: job
+      type: String
+      dist:
+        type: constant_string
+        value: kube-state-metrics
+    - name: namespace
+      type: String
+      dist:
+        type: replica_string
+        replica: 18
+        replica_prefix: app-
+    - name: node
+      type: String
+      dist:
+        type: replica_string
+        replica: 1
+        replica_prefix: node-
+    - name: pod
+      type: String
+      dist:
+        type: replica_string
+        replica: 2
+        replica_prefix: pod-
+    - name: prometheus
+      type: String
+      dist:
+        type: constant_string
+        value: monitoring/prometheus-kube-prometheus-prometheus
+    - name: prometheus_replica
+      type: String
+      dist:
+        type: constant_string
+        value: prometheus-prometheus-kube-prometheus-prometheus-0
+    - name: resource
+      type: String
+      dist:
+        type: constant_string
+        value: cpu
+    - name: service
+      type: String
+      dist:
+        type: constant_string
+        value: prometheus-kube-state-metrics
+    - name: uid
+      type: String
+      dist:
+        type: constant_string
+        value: f5a3af84-221f-486f-821f-1fbd61b5ede2
+    - name: unit
+      type: String
+      dist:
+        type: constant_string
+        value: core
+fields:
+    - name: greptime_value
+      type: Float
+      dist:
+        type: mono_inc
+        lower_bound: 1
+        upper_bound: 1000
+        step: 10

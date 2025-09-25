@@ -1,0 +1,174 @@
+start: "2021-01-01T00:00:00Z"
+end: "2021-01-01T00:00:00Z"
+interval: 30
+tags:
+    - name: app
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: app0
+              weight: 1
+    - name: app_kubernetes_io_component
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: app_kubernetes_io_component0
+              weight: 1
+    - name: app_kubernetes_io_managed_by
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: app_kubernetes_io_managed_by0
+              weight: 1
+    - name: app_kubernetes_io_name
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: app_kubernetes_io_name0
+              weight: 1
+    - name: app_kubernetes_io_part_of
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: app_kubernetes_io_part_of0
+              weight: 1
+    - name: app_kubernetes_io_version
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: app_kubernetes_io_version0
+              weight: 1
+    - name: cluster
+      type: String
+      dist:
+        type: constant_string
+        value: eks-us-east-1-qa1
+    - name: endpoint
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: endpoint0
+              weight: 1
+    - name: env
+      type: String
+      dist:
+        type: constant_string
+        value: qa
+    - name: holiday
+      type: String
+      dist:
+        type: constant_string
+        value: "false"
+    - name: hostname
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: hostname0
+              weight: 1
+    - name: instance
+      type: String
+      dist:
+        type: replica_string
+        replica: 1
+        replica_prefix: instance-
+    - name: instance_type
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: instance_type0
+              weight: 1
+    - name: job
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: kubelet
+              weight: 1
+            - value: kube-state-metrics
+              weight: 1
+    - name: kubernetes_name
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: kubernetes_name0
+              weight: 1
+    - name: kubernetes_namespace
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: kubernetes_namespace0
+              weight: 1
+    - name: kubernetes_pod_name
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: kubernetes_pod_name0
+              weight: 1
+    - name: metrics_path
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: /metrics
+              weight: 1
+    - name: pod
+      type: String
+      dist:
+        type: replica_string
+        replica: 2
+        replica_prefix: pod-
+    - name: prometheus
+      type: String
+      dist:
+        type: constant_string
+        value: monitoring/prometheus-kube-prometheus-prometheus
+    - name: prometheus_replica
+      type: String
+      dist:
+        type: constant_string
+        value: prometheus-prometheus-kube-prometheus-prometheus-0
+    - name: region
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: region0
+              weight: 1
+            - value: region1
+              weight: 1
+    - name: service
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: service0
+              weight: 1
+    - name: zone
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: zone0
+              weight: 1
+            - value: zone1
+              weight: 1
+fields:
+    - name: greptime_value
+      type: Float
+      dist:
+        type: mono_inc
+        lower_bound: 1
+        upper_bound: 1000
+        step: 10

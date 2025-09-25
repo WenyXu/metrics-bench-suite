@@ -31,12 +31,6 @@ type SampleLoader struct {
 	Database       string
 }
 
-type metric struct {
-	Name   string
-	Series []map[string]string
-	Fields []samples.FloatGenerator
-}
-
 func (s *SampleLoader) run(cmd *cobra.Command, _ []string) error {
 	var err error
 	intervalStr, _ := cmd.Flags().GetString("interval")
@@ -155,50 +149,6 @@ func worker(id int, url string, request <-chan prompb.WriteRequest, wg *sync.Wai
 		}
 		log.Printf("worker %d sent request in %s", id, time.Since(now))
 	}
-}
-
-// convertMetricToTimeSeries is not used anymore since we're using the streaming approach
-// This is kept for reference or if needed in the future
-func (s *SampleLoader) convertMetricToTimeSeries(metric metric, current time.Time, pickRate float32) []prompb.TimeSeries {
-	tsSet := make([]prompb.TimeSeries, 0)
-	for i, label := range metric.Series {
-		ts := prompb.TimeSeries{
-			Labels:  make([]prompb.Label, 0),
-			Samples: make([]prompb.Sample, 0),
-		}
-		ts.Labels = append(ts.Labels, prompb.Label{
-			Name:  "__name__",
-			Value: metric.Name,
-		})
-		for k, v := range label {
-			if pickRate < 1.0 {
-				if rand.Float32() > pickRate {
-					continue
-				}
-			}
-			ts.Labels = append(ts.Labels, prompb.Label{
-				Name:  k,
-				Value: v,
-			})
-		}
-
-		// Add database label if specified
-		if s.Database != "" {
-			ts.Labels = append(ts.Labels, prompb.Label{
-				Name:  "database",
-				Value: s.Database,
-			})
-		}
-
-		generator := metric.Fields[i]
-		ts.Samples = append(ts.Samples, prompb.Sample{
-			Value:     generator.Next(),
-			Timestamp: current.UnixMilli(),
-		})
-		tsSet = append(tsSet, ts)
-	}
-
-	return tsSet
 }
 
 // TagSetPermutationStream generates permutations on-demand using a goroutine
