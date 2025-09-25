@@ -28,6 +28,7 @@ type SampleLoader struct {
 	Infinite       bool
 	TagsPickRate   float32
 	TablePickCount uint64
+	Database       string
 }
 
 type metric struct {
@@ -86,6 +87,10 @@ func (s *SampleLoader) run(cmd *cobra.Command, _ []string) error {
 	if err != nil {
 		return err
 	}
+	s.Database, err = cmd.Flags().GetString("database")
+	if err != nil {
+		return err
+	}
 	log.Printf("Start date: %s", s.StartDate)
 	log.Printf("End date: %s", s.EndDate)
 	log.Printf("Interval: %s", s.Interval)
@@ -93,6 +98,7 @@ func (s *SampleLoader) run(cmd *cobra.Command, _ []string) error {
 	log.Printf("Config path: %s", s.ConfigPath)
 	log.Printf("Tags pick rate: %f", s.TagsPickRate)
 	log.Printf("Table pick rate: %d", s.TablePickCount)
+	log.Printf("Database: %s", s.Database)
 
 	fileConfigs, err := samples.WalkAndParseConfigWithMaxFileCount(s.ConfigPath, s.TablePickCount)
 	if err != nil {
@@ -151,7 +157,9 @@ func worker(id int, url string, request <-chan prompb.WriteRequest, wg *sync.Wai
 	}
 }
 
-func convertMetricToTimeSeries(metric metric, current time.Time, pickRate float32) []prompb.TimeSeries {
+// convertMetricToTimeSeries is not used anymore since we're using the streaming approach
+// This is kept for reference or if needed in the future
+func (s *SampleLoader) convertMetricToTimeSeries(metric metric, current time.Time, pickRate float32) []prompb.TimeSeries {
 	tsSet := make([]prompb.TimeSeries, 0)
 	for i, label := range metric.Series {
 		ts := prompb.TimeSeries{
@@ -171,6 +179,14 @@ func convertMetricToTimeSeries(metric metric, current time.Time, pickRate float3
 			ts.Labels = append(ts.Labels, prompb.Label{
 				Name:  k,
 				Value: v,
+			})
+		}
+
+		// Add database label if specified
+		if s.Database != "" {
+			ts.Labels = append(ts.Labels, prompb.Label{
+				Name:  "database",
+				Value: s.Database,
 			})
 		}
 
@@ -285,6 +301,14 @@ func (s *SampleLoader) generateTimeSeriesForFileConfig(fileConfig samples.FileCo
 				Timestamp: current.UnixMilli(),
 			})
 
+			// Add database label if specified
+			if s.Database != "" {
+				ts.Labels = append(ts.Labels, prompb.Label{
+					Name:  "database",
+					Value: s.Database,
+				})
+			}
+
 			// Send this single time series to the channel
 			timeSeriesChan <- ts
 		}
@@ -363,6 +387,7 @@ func NewCommand() *cobra.Command {
 	rootCmd.Flags().BoolP("infinite", "i", false, "Run indefinitely")
 	rootCmd.Flags().Float32P("tags-pick-rate", "p", 1.0, "The rate of the pick tags")
 	rootCmd.Flags().Uint64P("table-pick-count", "n", math.MaxUint64, "The number of tables to pick from")
+	rootCmd.Flags().StringP("database", "d", "", "The database name to add as a label to all metrics")
 
 	return rootCmd
 }
