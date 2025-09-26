@@ -141,13 +141,14 @@ func (s *SampleLoader) run(cmd *cobra.Command, _ []string) error {
 func worker(id int, url string, request <-chan prompb.WriteRequest, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for request := range request {
+		numSeries := len(request.Timeseries)
 		now := time.Now()
 		r := http.NewRequester(url)
 		err := r.Send(request)
 		if err != nil {
 			log.Printf("worker %d failed to send write request: %v", id, err)
 		}
-		log.Printf("worker %d sent request in %s", id, time.Since(now))
+		log.Printf("worker %d sent request in %s, num series: %d", id, time.Since(now), numSeries)
 	}
 }
 
