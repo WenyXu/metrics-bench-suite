@@ -1,7 +1,6 @@
 package samples
 
 import (
-	"fmt"
 	"io/fs"
 	"log"
 	"math"
@@ -26,22 +25,28 @@ func getFileNameWithoutExt(path string) string {
 func WalkAndParseConfigWithMaxFileCount(path string, tablePickCount uint64) ([]FileConfig, error) {
 	var fileConfigs []FileConfig
 
+	var totalSeries = 0
 	err := filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
 		if !d.IsDir() && (filepath.Ext(path) == ".yaml" || filepath.Ext(path) == ".yml") {
-			fmt.Println("Parsing file:", path)
-
 			data, err := parseYAML(path)
 			if err != nil {
 				log.Printf("Error parsing YAML file %s: %v\n", path, err)
 				return nil
 			}
 
-			name := getFileNameWithoutExt(path)
+			metricName := getFileNameWithoutExt(path)
+			num_series := 1
+			for _, tag := range data.Tags {
+				num_series *= tag.Dist.LabelGenerator().NumCandidates()
+			}
+			log.Printf("Parsing file: %s, num series: %d\n", path, num_series)
+			totalSeries += num_series
+
 			fileConfigs = append(fileConfigs, FileConfig{
-				Name:   name,
+				Name:   metricName,
 				Config: data,
 			})
 			if uint64(len(fileConfigs)) > tablePickCount {
@@ -51,6 +56,8 @@ func WalkAndParseConfigWithMaxFileCount(path string, tablePickCount uint64) ([]F
 		}
 		return nil
 	})
+
+	log.Printf("Total series: %d\n", totalSeries)
 
 	if err != nil {
 		return nil, err

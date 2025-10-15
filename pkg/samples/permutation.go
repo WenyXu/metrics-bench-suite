@@ -5,22 +5,23 @@ import (
 	"maps"
 )
 
-// Label is a struct that represents a label in a metric.
-type Label struct {
+// LabelCandidates is a struct that represents a label in a metric.
+type LabelCandidates struct {
 	Name   string
 	Values []string
 }
 
 // TagSetPermutation generates all possible permutations of tag sets.
-func TagSetPermutation(labels []Label, totalCount *int) []map[string]string {
-	Set := make(map[string][]string)
+func TagSetPermutation(labels []LabelCandidates, totalCount *int) []map[string]string {
+	// Label name -> candidates.
+	candidatesMap := make(map[string][]string)
 	for _, label := range labels {
-		Set[label.Name] = label.Values
+		candidatesMap[label.Name] = label.Values
 	}
 
-	keys := make([]string, 0, len(Set))
-	values := make([][]string, 0, len(Set))
-	for k, v := range Set {
+	keys := make([]string, 0, len(candidatesMap))
+	values := make([][]string, 0, len(candidatesMap))
+	for k, v := range candidatesMap {
 		keys = append(keys, k)
 		values = append(values, v)
 	}

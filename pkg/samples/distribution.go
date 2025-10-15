@@ -12,6 +12,8 @@ type LabelGenerator interface {
 
 	// All returns all the possible values
 	All() []string
+
+	NumCandidates() int
 }
 
 // FloatGenerator is an interface that represents a float generator.
@@ -78,6 +80,10 @@ func NewRandomInt(lowerBound int, upperBound int) *RandomInt {
 // ConstantString is a struct that represents a constant string.
 type ConstantString struct {
 	value string
+}
+
+func (c *ConstantString) NumCandidates() int {
+	return 1
 }
 
 // Next returns the constant value.
@@ -188,6 +194,10 @@ func NewPeriodic(period int, amplitude int, bias int) *Periodic {
 type WeightedPreset struct {
 	preset      []PresetItem
 	totalWeight int
+}
+
+func (w *WeightedPreset) NumCandidates() int {
+	return len(w.preset)
 }
 
 // Next returns a random value from the preset based on the weighted distribution.

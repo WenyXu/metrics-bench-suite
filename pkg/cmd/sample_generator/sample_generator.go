@@ -98,10 +98,10 @@ func (s *SampleGenerator) run(cmd *cobra.Command, args []string) error {
 	totalCount := 0
 	metrics := make([]metric, len(fileConfigs))
 	for i, fileConfig := range fileConfigs {
-		labels := make([]samples.Label, 0)
+		labels := make([]samples.LabelCandidates, 0)
 		for _, tag := range fileConfig.Config.Tags {
 			values := tag.Dist.LabelGenerator().All()
-			labels = append(labels, samples.Label{
+			labels = append(labels, samples.LabelCandidates{
 				Name:   tag.Name,
 				Values: values,
 			})

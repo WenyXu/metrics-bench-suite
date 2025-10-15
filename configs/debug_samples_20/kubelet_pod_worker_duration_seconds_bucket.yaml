@@ -1,0 +1,105 @@
+start: "2021-01-01T00:00:00Z"
+end: "2021-01-01T00:00:00Z"
+interval: 30
+tags:
+    - name: cluster
+      type: String
+      dist:
+        type: constant_string
+        value: eks-us-east-1-qa1
+    - name: endpoint
+      type: String
+      dist:
+        type: constant_string
+        value: https-metrics
+    - name: env
+      type: String
+      dist:
+        type: constant_string
+        value: qa
+    - name: holiday
+      type: String
+      dist:
+        type: constant_string
+        value: "false"
+    - name: instance
+      type: String
+      dist:
+        type: replica_string
+        replica: 1
+        replica_prefix: instance-
+    - name: job
+      type: String
+      dist:
+        type: constant_string
+        value: kubelet
+    - name: le
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: "10"
+              weight: 1
+            - value: "0.025"
+              weight: 1
+            - value: "0.1"
+              weight: 1
+            - value: +Inf
+              weight: 1
+            - value: "5"
+              weight: 1
+            - value: "0.05"
+              weight: 1
+            - value: "2.5"
+              weight: 1
+    - name: metrics_path
+      type: String
+      dist:
+        type: constant_string
+        value: /metrics
+    - name: namespace
+      type: String
+      dist:
+        type: replica_string
+        replica: 18
+        replica_prefix: app-
+    - name: node
+      type: String
+      dist:
+        type: replica_string
+        replica: 1
+        replica_prefix: node-
+    - name: operation_type
+      type: String
+      dist:
+        type: weighted_preset
+        preset:
+            - value: operation_type0
+              weight: 1
+            - value: operation_type1
+              weight: 1
+            - value: operation_type2
+              weight: 1
+    - name: prometheus
+      type: String
+      dist:
+        type: constant_string
+        value: monitoring/prometheus-kube-prometheus-prometheus
+    - name: prometheus_replica
+      type: String
+      dist:
+        type: constant_string
+        value: prometheus-prometheus-kube-prometheus-prometheus-0
+    - name: service
+      type: String
+      dist:
+        type: constant_string
+        value: prometheus-kube-prometheus-kubelet
+fields:
+    - name: greptime_value
+      type: Float
+      dist:
+        type: mono_inc
+        lower_bound: 1
+        upper_bound: 1000
+        step: 10
