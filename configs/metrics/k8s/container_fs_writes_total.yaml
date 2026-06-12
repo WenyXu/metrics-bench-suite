@@ -104,7 +104,7 @@ tags:
     preset:
     - value: null
       weight: 1
-    - value: docker.io/bitnami/kafka:3.9.0-debian-12-r1
+    - value: docker.io/soldevelo/kafka:3.9.2-debian-12-r0
       weight: 1
     - value: quay.io/argoproj/argocd:v2.10.1
       weight: 1
